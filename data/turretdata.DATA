@@ -1,0 +1,26 @@
+<TURRETDATA>
+ID	Name				Cost	bDamage	bRange	bRateofFire	Bullets	BulletType	Color
+0	Basic				100		10		100		2			1		0			255-255-255
+1	Power				200		15		120		3			1		0			255-255-255
+2	Precision			200		1		200		1			1		1			255-255-255
+3	RapidFire			250		8		100		10			1		0			255-255-255
+4	Burst				500		5		120		6			3		0			255-255-255
+5	Spread				150		15		100		2			1000	2			255-255-255
+</TURRETDATA>
+	
+<UPGRADES>
+ID	branch1	branch2	branch3
+0	1		-1		-1
+1	2		3		5
+2	-1		-1		-1
+3	4		-1		-1
+4	-1		-1		-1
+5	-1		-1		-1
+</UPGRADES>
+	
+<BULLETTYPES>
+ID	Graphic	Color 		Speed	Accuracy
+0	Tracer	255-255-200	12		0.12
+1	Beam	90-150-255	0		0.02
+2	Shell	100-255-100	10		0.1
+</BULLETTYPES>

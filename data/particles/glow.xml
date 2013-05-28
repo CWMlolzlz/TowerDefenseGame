@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<emitter imageName="" name="Glow">
+  <spawnInterval enabled="true" max="60.0" min="50.0"/>
+  <spawnCount enabled="true" max="5.0" min="5.0"/>
+  <initialLife enabled="true" max="600.0" min="500.0"/>
+  <initialSize enabled="true" max="50.0" min="5.0"/>
+  <xOffset enabled="true" max="5.0" min="-5.0"/>
+  <yOffset enabled="true" max="5.0" min="-5.0"/>
+  <initialDistance enabled="false" max="0.0" min="0.0"/>
+  <speed enabled="true" max="150.0" min="0.0"/>
+  <length enabled="false" max="1000.0" min="1000.0"/>
+  <spread value="120.0"/>
+  <angularOffset value="90.0"/>
+  <growthFactor value="5.0"/>
+  <gravityFactor value="0.0"/>
+  <startAlpha value="64.0"/>
+  <endAlpha value="0.0"/>
+  <color>
+    <step b="0.3" g="0.8" offset="0.0" r="1.0"/>
+  </color>
+</emitter>
