@@ -25,8 +25,8 @@ public class Level {
 	public Polygon pathedgeA = new Polygon();
 	public Polygon pathedgeB = new Polygon();
 		
-	public static int maximumWaves;
-	public static int currentWave = 1;
+	public int maximumWaves;
+	public int currentWave = 1;
 	private int enemiesInWave;
 	public static int enemiesKilled;
 	private boolean waveStarted = false;
@@ -43,6 +43,8 @@ public class Level {
 	public void newLevel(){
 		enemies.clear();
 		nodes.clear();
+		turrets.clear();
+		bullets.clear();
 	}
 	
 	public void loadLevel(String levelnum){
@@ -77,7 +79,6 @@ public class Level {
 			ce = ParticleIO.loadEmitter(new File("data/particles/glow.xml"));
 			float[] p = path.getPoint(1);
 			ce.setPosition(p[0]-2, p[1]);
-			//Play.ps.addEmitter(ce);
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -152,11 +153,16 @@ public class Level {
 	
 	private void waveStep(){
 		
-		//credit intrest
+		//credit interest
 		creditInterest();
 		if(enemiesKilled == enemiesInWave){
+			if(currentWave == maximumWaves){
+				Play.enterState();
+				//completeLevel();
+			}
 			waveComplete = true;
 			waveStarted = false;
+			currentWave++;
 		}else{
 			for(int i = 0; i < spawners.size(); i++){
 				Spawner s = spawners.get(i);
@@ -173,6 +179,11 @@ public class Level {
 	}
 	
 	
+	private void completeLevel() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private void creditInterest(){
 		float c = Play.credits;
 		Play.credits += c*0.0002f;

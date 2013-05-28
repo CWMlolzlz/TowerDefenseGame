@@ -45,7 +45,8 @@ public class Play extends BasicGameState{
 	
 	public int screenWidth, screenHeight;
 	
-	private GameContainer gamecont;
+	public GameContainer gamecont;
+	public static StateBasedGame statebasedgame;
 	
 	//input
 	public Input i;
@@ -61,19 +62,21 @@ public class Play extends BasicGameState{
 	
 	public static float credits = 150;
 	
-	public Level level = new Level();
+	public Level level;
 	
 	//onscreen enitites
 	
 	
 	public Play(int state){
-		
+		level = new Level();
 	}
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
 		gamecont = gc;
+		statebasedgame = sbg;
+		System.out.println("new level");
 		try {
 			ce = ParticleIO.loadEmitter(psXML);
 		} catch (IOException e) {
@@ -100,12 +103,13 @@ public class Play extends BasicGameState{
 		
 		
 		//debug info
-		g.drawString("Select state: " + selectstatus, 10, 30);
-		g.drawString("Number of Turrets: " + Level.getTurrets().size(), 10, 50);
+		g.drawString("Select state:" + selectstatus, 10, 30);
+		g.drawString("Number of Turrets:" + Level.getTurrets().size(), 10, 50);
 		g.drawString("Number of Enemies:" + Level.getEnemies().size(), 200,30 );
-		g.drawString("Number Of Emitters: " + ps.getEmitterCount(), 200, 50);
-		g.drawString("Number of Particles: " + ps.getParticleCount(), 390, 30);
-		
+		g.drawString("Number Of Emitters:" + ps.getEmitterCount(), 200, 50);
+		g.drawString("Number of Particles:" + ps.getParticleCount(), 400, 30);
+		g.drawString("Current Wave:" + level.currentWave, 400, 50);
+
 		g.drawString("MEM in use: " + (Runtime.getRuntime().totalMemory()/1000000) + "(MB)", 10, 580);
 		g.drawString("Credits: " + (int)(credits), 10, 560);
 		
@@ -345,7 +349,7 @@ public class Play extends BasicGameState{
 		System.out.println("Right click");
 		switch(selectstatus){
 		case(NONE):
-			
+			//right click with nothing on hand
 			break;
 		case(BUILDINGTURRET):
 			tOnHand = null;
@@ -363,6 +367,10 @@ public class Play extends BasicGameState{
 	@Override
 	public int getID() {
 		return 1;
+	}
+	
+	public static void enterState(){
+		statebasedgame.enterState(0);
 	}
 	
 	public static void pay(int val){credits += val;}

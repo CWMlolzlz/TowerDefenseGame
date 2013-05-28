@@ -25,9 +25,8 @@ public class Enemy {
 	private int totalsegments;
 	private double segmentangle;
 	
-	private HealthBar healthbar;
-	
-	
+	private HealthBar healthbar = new HealthBar(30,2, 1); //declared here to stop bugs
+		
 	private static ArrayList<Node> nodes;
 	private Circle shape;
 	private boolean alive;
