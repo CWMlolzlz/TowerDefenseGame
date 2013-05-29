@@ -43,6 +43,8 @@ public class Play extends BasicGameState{
 	
 	private final int NONE = 0, BUILDINGTURRET = 1, EDITINGTURRET = 2, HOVERTURRET = 3;
 	
+	
+	
 	public int screenWidth, screenHeight;
 	
 	public GameContainer gamecont;
@@ -65,8 +67,7 @@ public class Play extends BasicGameState{
 	public Level level;
 	
 	//onscreen enitites
-	
-	
+		
 	public Play(int state){
 		level = new Level();
 	}
@@ -100,8 +101,7 @@ public class Play extends BasicGameState{
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
 		g.setAntiAlias(true);
-		
-		
+				
 		//debug info
 		g.drawString("Select state:" + selectstatus, 10, 30);
 		g.drawString("Number of Turrets:" + Level.getTurrets().size(), 10, 50);
@@ -114,8 +114,8 @@ public class Play extends BasicGameState{
 		g.drawString("Credits: " + (int)(credits), 10, 560);
 		
 		//path
-		g.setColor(Color.cyan);
-		g.draw(level.getPath());
+		//g.setColor(Color.cyan);
+		//g.draw(level.getPath());
 		g.setColor(Color.blue);
 		g.draw(level.getEdgeA());
 		g.draw(level.getEdgeB());
@@ -129,18 +129,23 @@ public class Play extends BasicGameState{
 			g.fill(e.getHealthBarShape());
 			g.setColor(Color.white);
 			g.draw(e.getShape());
-		
 		}
 		
 		//built turrets
-		g.setColor(Color.red);
+		g.setColor(Color.yellow);
 		ArrayList<Turret> turrets = Level.getTurrets(); //optimise drawing. onefunction????
 		for(int j = 0; j < turrets.size(); j++){
-			g.draw(turrets.get(j).getCircle());
+			Turret t = turrets.get(j);
+			
+			g.draw(t.getCircle());
+		}
+		g.setColor(Color.green);
+		//selectedturret
+		if(selectedTurret != null){
+			g.draw(selectedTurret.getRangeCircle());
 		}
 		
 		//draw bullets
-		g.setColor(Color.white);
 		//g.setLineWidth(3);
 		ArrayList<Bullet> bullets = Level.getBullets();
 		for(int b = 0; b < bullets.size(); b++){
@@ -153,14 +158,17 @@ public class Play extends BasicGameState{
 		//g.setLineWidth(1);
 		
 		//turret on hand
-		g.setColor(Color.green);
 		if(tOnHand != null){
+			if(tOnHand.valid){
+				g.setColor(Color.green);
+			}else{
+				g.setColor(Color.red);
+			}
 			g.draw(tOnHand.getCircle());
 		}
 		
-		//selectedturret
-		if(selectedTurret != null){
-			g.draw(selectedTurret.getRangeCircle());
+		if(ps != null){
+			ps.render();
 		}
 		
 		//turret gui
@@ -183,9 +191,7 @@ public class Play extends BasicGameState{
 			}
 		}
 		
-		if(ps != null){
-			ps.render();
-		}
+		
 		//cursor
 		g.setColor(Color.white);
 		g.draw(mp);
@@ -204,16 +210,18 @@ public class Play extends BasicGameState{
 		if(tOnHand != null){
 			tOnHand.updatePlacement(mp.getCenterX(), mp.getCenterY());
 			selectedTurret = tOnHand;
+			if(getCollidingTurret(tOnHand.getCircle()) != null || isCollidingPath(tOnHand.getCircle())){
+				tOnHand.valid = false;
+			}else{
+				tOnHand.valid = true;
+			}
 		}
 		//checks mouse position
 		else if(selectstatus == EDITINGTURRET){						//&& tGUI != null){
 			//mouse is editing
-		}else 
-			if(collidingturret != null){
+		}else if(collidingturret != null){
 			selectstatus = HOVERTURRET;
 			selectedTurret = collidingturret;
-		}else if(tOnHand != null){
-			selectstatus = BUILDINGTURRET;
 		}else{
 			selectstatus = NONE;
 			selectedTurret = null;
@@ -238,13 +246,14 @@ public class Play extends BasicGameState{
 				selectstatus = BUILDINGTURRET;
 				break;
 			case(BUILDINGTURRET): //BUILDING ==> NONE
-				if(getCollidingTurret(tOnHand.getCircle()) != null || isCollidingPath(tOnHand.getCircle())){ //optimise detection for both cases
-					//cant place turret
-					selectstatus = NONE;
-				}else if(credits >= 100){
+				if(tOnHand.valid && credits >= 100){ //optimise detection for both cases
 					//can place turret
 					level.placeTurret(tOnHand);
 					credits -= 100;
+				}else{
+					//cant place turret
+					selectstatus = NONE;
+					
 				}
 				tOnHand = null;
 				selectstatus = NONE;
@@ -359,15 +368,11 @@ public class Play extends BasicGameState{
 			tGUI = null;
 			selectstatus = NONE;
 		}
-		
-		
-		
 	}
 	
 	@Override
-	public int getID() {
-		return 1;
-	}
+	public int getID(){return 1;}
+	
 	
 	public static void enterState(){
 		statebasedgame.enterState(0);

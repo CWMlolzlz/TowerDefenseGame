@@ -13,6 +13,7 @@ public class Turret {
 	private static final float splitshot = 0.2f;
 	
 	public boolean placed;
+	public boolean valid;
 	private float x, y, radius = 12;
 	private Circle area;
 	private Circle rangecircle;
@@ -35,6 +36,7 @@ public class Turret {
 	
 	public Turret(){
 		placed = false;
+		valid = false;
 		area = new Circle(x,y,radius);
 		
 		updateSpecs();

@@ -82,7 +82,7 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 			}
 		}else if(command == enter){
 			if(isPlaying()){
-				play.level.startWave();
+				//play.level.startWave();
 			}
 		}else if(command == escape){
 			this.getContainer().exit();

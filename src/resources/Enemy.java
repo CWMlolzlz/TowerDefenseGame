@@ -14,7 +14,7 @@ public class Enemy {
 
 	//enemy data
 	private String name;
-	private float health, sheild, speed, regen;
+	private float starthealth, health, sheild, speed, regen;
 	private int ID,reward,cost;
 	
 	private int radius = 10;
@@ -36,7 +36,8 @@ public class Enemy {
 		ID = etype.ID;
 		name = etype.NAME;
 		
-		health = etype.HEALTH;
+		starthealth = etype.HEALTH;
+		health = starthealth;
 		sheild = etype.SHEILD;
 		speed = etype.SPEED;
 		regen = etype.REGEN;
@@ -64,23 +65,29 @@ public class Enemy {
 			Play.pay(reward);
 			Level.enemiesKilled++;
 			Level.removeEnemy(this);
-		}
-		
-		if(currentdistanceonsegment >= currentsegmentlength){
-			if(currentsegment == totalsegments){
-				//destroy
-				Level.removeEnemy(this);
-			}else{
-				newSegment();
-			}
 		}else{
-			currentdistanceonsegment += speed;
-			x = (float) (nodes.get(currentsegment).x + currentdistanceonsegment*Math.cos(segmentangle)); //x coordinate
-			y = (float) (nodes.get(currentsegment).y + currentdistanceonsegment*Math.sin(segmentangle)); //y coordinate
-		}
+			if(health < starthealth){
+				health += regen;
+				if(health > starthealth){
+					health = starthealth;
+				}
+			}
+			if(currentdistanceonsegment >= currentsegmentlength){
+				if(currentsegment == totalsegments){
+					//destroy
+					Level.removeEnemy(this);
+				}else{
+					newSegment();
+				}
+			}else{
+				currentdistanceonsegment += speed;
+				x = (float) (nodes.get(currentsegment).x + currentdistanceonsegment*Math.cos(segmentangle)); //x coordinate
+				y = (float) (nodes.get(currentsegment).y + currentdistanceonsegment*Math.sin(segmentangle)); //y coordinate
+			}
 		
-		shape = new Circle(x,y,radius);
-		healthbar.update(x - 15, y-18, health);
+			shape = new Circle(x,y,radius);
+			healthbar.update(x - 15, y-18, health);
+		}
 	}
 	
 	private void newSegment(){

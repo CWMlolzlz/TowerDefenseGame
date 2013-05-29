@@ -1,4 +1,4 @@
-package resources;
+package gui;
 
 public class Prompt {
 

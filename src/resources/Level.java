@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.particles.ConfigurableEmitter;
 import org.newdawn.slick.particles.ParticleIO;
@@ -19,7 +20,11 @@ public class Level {
 	public LevelData leveldata;
 	private ArrayList<Wave> waves;
 	private ArrayList<Spawner> spawners = new ArrayList<Spawner>();
-		
+	
+	public static int gamestage;
+	public static int BREAK = 0, WAVE = 1, COMPLETE = 2;
+	private int breaktick = 0, breakTimeLimit = 300;
+	
 	public String levelname;
 	public Polygon path = new Polygon(); //path is used strictly for drawing
 	public Polygon pathedgeA = new Polygon();
@@ -29,8 +34,9 @@ public class Level {
 	public int currentWave = 1;
 	private int enemiesInWave;
 	public static int enemiesKilled;
-	private boolean waveStarted = false;
-	private boolean waveComplete = false;
+	private ProgressBar pb;
+	//private boolean waveStarted = false;
+	//private boolean waveComplete = false;
 	private Wave wave;
 	
 	public static int delay = 0;
@@ -90,8 +96,14 @@ public class Level {
 		if(delay == 60){delay = 0;}
 		
 		//wave
-		if(waveStarted && !waveComplete){
+		if(gamestage == WAVE){
 			waveStep();
+		}else if(gamestage == BREAK){
+			breaktick++;
+			if(breaktick == breakTimeLimit){
+				breaktick = 0;
+				startWave();
+			}
 		}
 		//make turrets shoot
 		shoot();
@@ -136,19 +148,19 @@ public class Level {
 	public void startWave(){
 		spawners.clear();
 		System.out.println("new wave");
-		if(!waveStarted){
-			enemiesInWave = 0;
+		//if(gamestage == WAVE){
+			gamestage = WAVE;
 			enemiesKilled = 0;
-			waveStarted = true;
-			waveComplete = false;
+			//waveStarted = true;
+			//waveComplete = false;
 			wave = waves.get(currentWave-1);
 			for(int s = 0; s < wave.spawnData.size(); s++){
 				SpawnData sd = wave.spawnData.get(s);
 				enemiesInWave += sd.QUANTITY;
 				spawners.add(new Spawner(sd));
 			}
-			
-		}
+			pb = new ProgressBar(enemiesInWave);
+		//}
 	}
 	
 	private void waveStep(){
@@ -157,11 +169,11 @@ public class Level {
 		creditInterest();
 		if(enemiesKilled == enemiesInWave){
 			if(currentWave == maximumWaves){
-				Play.enterState();
+				//Play.enterState();
 				//completeLevel();
+				gamestage = COMPLETE;
 			}
-			waveComplete = true;
-			waveStarted = false;
+			gamestage = BREAK;
 			currentWave++;
 		}else{
 			for(int i = 0; i < spawners.size(); i++){
@@ -209,5 +221,34 @@ public class Level {
 	public static ArrayList<Turret> getTurrets(){return turrets;}
 	public static ArrayList<Bullet> getBullets() {return bullets;}
 
+	
+}
+
+class ProgressBar{
+	
+	public Shape outline;
+	public Shape fill;
+	public String bottomtext;
+	public String toptext;
+	
+	public int percent;	
+	public int progress;
+	public int progressend;
+	private float ratio;
+	
+	private int x1 = 20, x2 = 780, y1 = 540, y2 = 560;
+	
+	public ProgressBar(int max){
+		progressend = max;
+		outline = new Rectangle(x1, y1, x2, y2);
+		fill = new Rectangle(x1,y1,x2,y2);
+		ratio = (x2-x1)/100;
+	}
+	
+	public void update(){
+		progress++;
+		percent = progress/progressend;
+		fill = new Rectangle(x1,y1,x1+(percent*ratio),y2);
+	}
 	
 }

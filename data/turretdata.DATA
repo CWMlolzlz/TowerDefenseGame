@@ -5,7 +5,7 @@ ID	Name				Cost	bDamage	bRange	bRateofFire	Bullets	BulletType	Color
 2	Precision			200		1		200		1			1		1			255-255-255
 3	RapidFire			250		5		100		10			1		0			255-255-255
 4	Burst				500		5		120		6			3		0			255-255-255
-5	Spread				150		15		100		2			1000	2			255-255-255
+5	Spread				150		15		100		2			3		2			255-255-255
 </TURRETDATA>
 	
 <UPGRADES>

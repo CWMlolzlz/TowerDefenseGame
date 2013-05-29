@@ -58,7 +58,7 @@ public class LevelData{
 			if(line.contains("</"+tag+">")){
 				break;
 			}else{
-				String[] splitline = line.split("\\s");
+				String[] splitline = line.split("\\s+");
 				int xcoord = Integer.parseInt(splitline[0]);
 				int ycoord = Integer.parseInt(splitline[1]);
 				list.add(new Node(xcoord, ycoord));
@@ -82,7 +82,7 @@ public class LevelData{
 			if(!line.matches("\\s*")){
 				Wave newWave = new Wave();
 				while(!line.matches("END")){
-					String[] splitline = line.split("\\t+");
+					String[] splitline = line.split("\\s+");
 					newWave.addSpawnData(splitline);
 					line = sc.nextLine();
 				}
