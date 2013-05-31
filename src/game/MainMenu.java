@@ -35,10 +35,12 @@ public class MainMenu extends BasicGameState{
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
 		width = gc.getWidth();
+		
 		//play = new MenuButton(new Image("play_button.png"), 100, 100, Launch.PLAY);
 		
-		buttons.add(new MenuButton("QUIT",100,0,QUIT));
-		buttons.add(new MenuButton("Play",0,0,PLAY));
+		buttons.add(new MenuButton("Play",20,50,PLAY));
+		buttons.add(new MenuButton("QUIT",20,200,QUIT));
+		
 		branches.add(new Branch(buttons));
 	}
 
@@ -49,8 +51,8 @@ public class MainMenu extends BasicGameState{
 			Branch b = branches.get(i);
 			for(int j = 0; j < b.buttons.size(); j++){
 				MenuButton button = b.buttons.get(j);
-				g.drawString(button.text, 0, 0);
-				g.draw(buttons.get(i).bounds);
+				g.drawString(button.text, button.getX(), button.getY());
+				g.draw(button.bounds);
 				//button.getImage().draw(button.getX(), button.getY());
 			}
 		}

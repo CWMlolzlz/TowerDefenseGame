@@ -20,7 +20,7 @@ public class MenuButton{
 	public String text;
 	
 	public Rectangle bounds;
-	private static int xpos,ypos;
+	private int xpos,ypos;
 	
 	public MenuButton(String string, int x, int y, int e) {
 		text = string;
