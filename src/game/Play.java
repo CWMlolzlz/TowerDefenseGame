@@ -45,8 +45,6 @@ public class Play extends BasicGameState{
 	
 	private final int NONE = 0, BUILDINGTURRET = 1, EDITINGTURRET = 2, HOVERTURRET = 3;
 	
-	
-	
 	public int screenWidth, screenHeight;
 	
 	public GameContainer gamecont;

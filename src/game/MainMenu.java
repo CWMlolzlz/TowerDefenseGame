@@ -1,6 +1,7 @@
 package game;
 
 import gui.Branch;
+import gui.Menu;
 import gui.MenuButton;
 
 import java.util.ArrayList;
@@ -26,10 +27,13 @@ public class MainMenu extends BasicGameState{
 	public static int my,mx;
 	public static Point mousepoint = new Point(Mouse.getX(), Mouse.getY());
 	
-	public static MenuButton play;
+	public Menu menu = new Menu();
 	
-	public ArrayList<Branch> branches = new ArrayList<Branch>();
-	public ArrayList<MenuButton> buttons = new ArrayList<MenuButton>();
+	public MainMenu(){
+		menu.addButton(new MenuButton("Play",20,50,PLAY));
+		menu.addButton(new MenuButton("Quit",20,50,QUIT));
+	}
+	
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
@@ -38,26 +42,13 @@ public class MainMenu extends BasicGameState{
 		
 		//play = new MenuButton(new Image("play_button.png"), 100, 100, Launch.PLAY);
 		
-		buttons.add(new MenuButton("Play",20,50,PLAY));
-		buttons.add(new MenuButton("QUIT",20,200,QUIT));
-		
-		branches.add(new Branch(buttons));
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
-		for(int i = 0; i < branches.size(); i++){
-			Branch b = branches.get(i);
-			for(int j = 0; j < b.buttons.size(); j++){
-				MenuButton button = b.buttons.get(j);
-				g.drawString(button.text, button.getX(), button.getY());
-				g.draw(button.bounds);
-				//button.getImage().draw(button.getX(), button.getY());
-			}
-		}
-		
-				
+		menu.draw(g);
+						
 		g.setColor(Color.white);
 		g.drawString("Mouse X: "+mx, 50, 50);
 		g.drawString("Mouse Y: "+my, 50, 70);
@@ -74,14 +65,8 @@ public class MainMenu extends BasicGameState{
 		mx = in.getMouseX();
 		my = gc.getHeight() - Mouse.getY();
 		mousepoint = new Point(mx,my);
-		for(int i = 0; i < buttons.size(); i++){
-			MenuButton button = buttons.get(i);
-			if(button.bounds.contains(mousepoint)){
-				button.setButtonState(button.HOVER_MOUSE);
-			}else{
-				button.setButtonState(button.NO_MOUSE);
-			}
-		}
+		menu.update();
+		
 	}
 
 	@Override
