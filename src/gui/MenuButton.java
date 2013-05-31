@@ -19,19 +19,20 @@ public class MenuButton{
 	private Image[] subimgs = new Image[3];
 	public String text;
 	
-	public Rectangle bounds;
-	private int xpos,ypos;
+	public Rectangle shape;
+	public float xpos, ypos;
 	
-	public MenuButton(String string, int x, int y, int e) {
+	
+	public MenuButton(String string, float x, float y, int e) {
 		text = string;
 		EVENT = e;
 		xpos = x;
 		ypos = y;
-		bounds = new Rectangle(x, y, width, height);
+		shape = new Rectangle(x, y, width, height);
 	}
 
-	public int getX(){return xpos;}
-	public int getY(){return ypos;}
+	public float getX(){return xpos;}
+	public float getY(){return ypos;}
 	
 	public boolean mouseInButton(float x, float y){
 		if((xpos<x && x<xpos+width) && (ypos<y && y<ypos+height)){

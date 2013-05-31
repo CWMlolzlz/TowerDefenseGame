@@ -1,9 +1,12 @@
-package resources;
+package resources.data;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import resources.Node;
+import resources.Wave;
 
 public class LevelData{
 
@@ -99,39 +102,4 @@ public class LevelData{
 	public ArrayList<Wave> getWaveData(){return waves;}
 }
 
-class Node{
-	public float x,y;
-	public Node(float newx, float newy){
-		x = newx;
-		y = newy;
-	}	
-}
 
-class Wave{
-	
-	ArrayList<SpawnData> spawnData = new ArrayList<SpawnData>();
-		
-	public void addSpawnData(String[] line){
-		int id = Integer.parseInt(line[0]);
-		int q = Integer.parseInt(line[1]);
-		
-		int i = Integer.parseInt(line[2]);
-		int d = Integer.parseInt(line[3]);
-		
-		spawnData.add(new SpawnData(id,q,i,d));
-	}
-}
-
-class SpawnData{
-	
-	public int ENEMYID, QUANTITY, DELAY;
-	public int INTERVAL;
-	
-	public SpawnData(int id, int q, int i, int d){
-		ENEMYID = id;
-		QUANTITY = q;
-		INTERVAL = i;
-		DELAY = d;
-	}
-	
-}

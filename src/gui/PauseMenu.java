@@ -9,7 +9,6 @@ import org.newdawn.slick.geom.Shape;
 public class PauseMenu{
 
 	public Shape window = new Rectangle(0,0,800,600);
-	ArrayList<Branch> branches = new ArrayList<Branch>();
 	ArrayList<MenuButton> buttons = new ArrayList<MenuButton>();
 	
 	

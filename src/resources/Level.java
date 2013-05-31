@@ -1,18 +1,18 @@
 package resources;
 
 import game.Play;
-import gui.*;
+import gui.ProgressBar;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.geom.Polygon;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.particles.ConfigurableEmitter;
 import org.newdawn.slick.particles.ParticleIO;
+
+import resources.data.LevelData;
 
 public class Level {
 	
@@ -193,12 +193,10 @@ public class Level {
 	}
 	
 	private void completeLevel() {
-		// TODO Auto-generated method stub
-		
+				
 	}
 
 	private void creditInterest(){
-		float c = Play.credits;
 		Play.credits *= 1.0002f;
 	}
 

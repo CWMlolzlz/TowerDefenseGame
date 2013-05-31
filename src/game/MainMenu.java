@@ -1,8 +1,11 @@
 package game;
 
-import gui.Branch;
 import gui.Menu;
 import gui.MenuButton;
+import gui.menus.LevelSelect;
+import gui.menus.Levels;
+import gui.menus.Options;
+import gui.menus.Top;
 
 import java.util.ArrayList;
 
@@ -10,28 +13,27 @@ import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class MainMenu extends BasicGameState{
 
-	private final int QUIT = 0, PLAY = 1, RESUME = 2, OPTIONS = 3;
+	public static final int QUIT = 0, PLAY = 1, OPTIONS = 2;
+	public static final int NEW_LEVEL = 10, RESUME = 11;
+	public static final int VIDEO = 20, AUDIO = 21;
 	
 	public static int width;
 	public static int height;
 	public static int my,mx;
 	public static Point mousepoint = new Point(Mouse.getX(), Mouse.getY());
 	
-	public Menu menu = new Menu();
+	public ArrayList<Menu> menus = new ArrayList<Menu>();
 	
 	public MainMenu(){
-		menu.addButton(new MenuButton("Play",20,50,PLAY));
-		menu.addButton(new MenuButton("Quit",20,50,QUIT));
+		menus.add(new Top(0,0));
 	}
 	
 	
@@ -47,14 +49,13 @@ public class MainMenu extends BasicGameState{
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
-		menu.draw(g);
-						
+		for(int i = 0; i < menus.size(); i++){
+			menus.get(i).draw(g);
+			menus.get(i).update(); //naughty naughty me
+		}
+				
 		g.setColor(Color.white);
-		g.drawString("Mouse X: "+mx, 50, 50);
-		g.drawString("Mouse Y: "+my, 50, 70);
-		
-		g.draw(mousepoint);
-		
+				
 	}
 
 	@Override
@@ -65,7 +66,7 @@ public class MainMenu extends BasicGameState{
 		mx = in.getMouseX();
 		my = gc.getHeight() - Mouse.getY();
 		mousepoint = new Point(mx,my);
-		menu.update();
+		
 		
 	}
 
@@ -76,11 +77,13 @@ public class MainMenu extends BasicGameState{
 
 	//mouse clicks
 	public void leftClick(StateBasedGame sbg) {
-		for(int i = 0; i < buttons.size(); i++){
-			MenuButton button = buttons.get(i);
-			if(button.bounds.contains(mousepoint)){
-				button.setButtonState(button.CLICK_MOUSE);
-				checkEvent(button.getEvent());
+		for(int i = 0; i < menus.size(); i++){
+			Menu m = menus.get(i);
+			if(m.outline.contains(mousepoint)){
+				MenuButton b = m.getClickedButton();
+				if(b != null){
+					checkEvent(b.getEvent());
+				}
 			}
 		}
 		
@@ -89,15 +92,37 @@ public class MainMenu extends BasicGameState{
 	private void checkEvent(int event) {
 		System.out.println(event);
 		switch(event){
-		
-		case(QUIT):Launch.quit();
-		case(PLAY):Launch.changeState(Launch.PLAY);
-		case(OPTIONS):
-		case(RESUME):
+			//top
+			case(QUIT):Launch.quit();break;
+			case(PLAY):
+				removeMenus(1);
+				menus.add(new Levels(menus.size()*200,0));
+				break;
+			case(OPTIONS):
+				removeMenus(1);
+				menus.add(new Options(menus.size()*200,0));
+				break;
+			case(NEW_LEVEL):
+				removeMenus(2);
+				menus.add(new LevelSelect(menus.size()*200,0));
+				break;
+			case(RESUME):
+				break;
+			
+			//resume
+			
+			//options
+			//case(VIDEO):menus.add(new Video(menus.size()*200,0));
+			//case(AUDIO):
 		}
 		
 	}
-	
+
+
+	private void removeMenus(int val) {
+		for(int i = val; i < menus.size(); i++){
+			menus.remove(i);
+		}
+		
+	}
 }
-
-

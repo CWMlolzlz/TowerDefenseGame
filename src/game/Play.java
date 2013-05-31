@@ -25,13 +25,13 @@ import org.newdawn.slick.state.StateBasedGame;
 import resources.Bullet;
 import resources.Button;
 import resources.Enemy;
-import resources.EnemyData;
 import resources.Explosion;
 import resources.Level;
 import resources.Spark;
 import resources.Turret;
-import resources.TurretData;
 import resources.TurretGUI;
+import resources.data.EnemyData;
+import resources.data.TurretData;
 
 public class Play extends BasicGameState{
 
@@ -174,7 +174,7 @@ public class Play extends BasicGameState{
 		}
 		
 		//progressbar
-		ProgressBar p = level.pb;
+		ProgressBar p = Level.pb;
 		g.setColor(Color.green);
 		g.fill(p.fill);
 		g.drawString(p.toptext, p.textx, p.texty);

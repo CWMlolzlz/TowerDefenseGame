@@ -8,6 +8,10 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
+import resources.data.TurretData;
+import resources.types.TurretType;
+import resources.types.UpgradeBranch;
+
 public class TurretGUI {
 
 	private static TurretData tdata = Play.TDATA;

@@ -1,9 +1,11 @@
-package resources;
+package resources.data;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import resources.types.EnemyType;
 
 public class EnemyData{
 
@@ -38,33 +40,5 @@ public class EnemyData{
 	}
 	
 	public ArrayList<EnemyType> getEnemyTypes(){return etypes;}
-	
-}
-
-class EnemyType{
-	
-	int ID;
-	String NAME;
-		
-	float HEALTH;
-	float SHIELD;
-	float SPEED;
-	float REGEN;
-	
-	int REWARD;
-	int COST; //explicitly for multiplayer and level/swarm editor
-	
-	public EnemyType(String[] line){
-		ID = Integer.parseInt(line[0]);
-		NAME = line[1];
-		
-		HEALTH = Integer.parseInt(line[2]);
-		SHIELD = Integer.parseInt(line[3]);
-		SPEED = Float.parseFloat(line[4]);
-		REGEN = Float.parseFloat(line[5]);
-		
-		REWARD = Integer.parseInt(line[6]);
-		COST = Integer.parseInt(line[7]);
-	}
 	
 }

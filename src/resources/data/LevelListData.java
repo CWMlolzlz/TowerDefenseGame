@@ -1,15 +1,15 @@
-package resources;
+package resources.data;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class LevelDataList{
+public class LevelListData{
 
 	private ArrayList<LevelData> levelData = new ArrayList<LevelData>();
 	
-	public LevelDataList(){
+	public LevelListData(){
 		loadLevelData();
 	}
 	

@@ -7,6 +7,10 @@ import java.util.Random;
 
 import org.newdawn.slick.geom.Circle;
 
+import resources.data.TurretData;
+import resources.types.BulletType;
+import resources.types.TurretType;
+
 public class Turret {
 
 	private static final TurretData tdata = Play.TDATA;

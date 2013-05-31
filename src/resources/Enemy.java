@@ -10,6 +10,8 @@ import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
+import resources.types.EnemyType;
+
 public class Enemy {
 
 	//enemy data

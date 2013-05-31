@@ -4,7 +4,8 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.particles.ParticleSystem;
+
+import resources.types.BulletType;
 
 public class Bullet{
 
