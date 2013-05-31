@@ -1,6 +1,7 @@
 <ENEMYTYPE>
-ID	Name		Health	Sheild	Speed	Regeneration	Reward	Cost
-0	Minion		15		0		1		0				10		10
+ID	Name		Health	Shield	Speed	Regeneration	Reward	Cost
+0	Weakling	10		0		1		0				10		10
 1	Brute		150		0		0.5		0				50		50
-2	Weakling	10		0		2		0.2				5		5
+2	Minion		20		0		2		0.01			5		5
+3	Hunker		20		600		0.3 	0 				100 	100
 </ENEMYTYPE>

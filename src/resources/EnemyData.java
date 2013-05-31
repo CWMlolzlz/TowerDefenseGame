@@ -31,7 +31,7 @@ public class EnemyData{
 			if(line.contains("</ENEMYTYPE>")){
 				break;
 			}else{
-				String[] splitline = line.split("\\t+");
+				String[] splitline = line.split("\\s+");
 				etypes.add(new EnemyType(splitline));
 			}
 		}
@@ -47,7 +47,7 @@ class EnemyType{
 	String NAME;
 		
 	float HEALTH;
-	float SHEILD;
+	float SHIELD;
 	float SPEED;
 	float REGEN;
 	
@@ -59,7 +59,7 @@ class EnemyType{
 		NAME = line[1];
 		
 		HEALTH = Integer.parseInt(line[2]);
-		SHEILD = Integer.parseInt(line[3]);
+		SHIELD = Integer.parseInt(line[3]);
 		SPEED = Float.parseFloat(line[4]);
 		REGEN = Float.parseFloat(line[5]);
 		

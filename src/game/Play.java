@@ -1,5 +1,7 @@
 package game;
 
+import gui.ProgressBar;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -125,6 +127,8 @@ public class Play extends BasicGameState{
 		ArrayList<Enemy> enemies = Level.getEnemies(); //optimise drawing. onefunction????
 		for(int i = 0; i < enemies.size(); i++){
 			Enemy e = enemies.get(i);
+			g.setColor(new Color(0,196,255));
+			g.fill(e.getShieldBarShape());
 			g.setColor(e.getHealthBarColor());
 			g.fill(e.getHealthBarShape());
 			g.setColor(Color.white);
@@ -170,6 +174,14 @@ public class Play extends BasicGameState{
 		if(ps != null){
 			ps.render();
 		}
+		
+		//progressbar
+		ProgressBar p = level.pb;
+		g.setColor(Color.green);
+		g.fill(p.fill);
+		g.drawString(p.toptext, p.textx, p.texty);
+		g.setColor(Color.white);
+		g.draw(p.outline);			
 		
 		//turret gui
 		if(tGUI != null){

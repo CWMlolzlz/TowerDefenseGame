@@ -26,18 +26,21 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 	public static final int PLAY = 1;
 	
 	private Play play = new Play(PLAY);
-	private Menu menu = new Menu(MENU);
+	private MainMenu menu = new MainMenu();
+	
+	public static GameContainer gamecontainer;
+	private static StateBasedGame sbg;
 	
 	public Launch(String gamename){
 		super(gamename);
 		this.addState(menu);
-		this.addState(play);
-		
+		this.addState(play);		
 	}
 
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
 		
+		gamecontainer = gc;
 		
 		
 		provider = new InputProvider(gc.getInput());
@@ -51,6 +54,7 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 		this.getState(PLAY).init(gc,this);
 		
 		this.enterState(MENU);
+		sbg = this;
 	}
 	
 	public static void main(String[] args) throws SlickException{
@@ -82,7 +86,7 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 			}
 		}else if(command == enter){
 			if(isPlaying()){
-				//play.level.startWave();
+				play.level.startWave();
 			}
 		}else if(command == escape){
 			this.getContainer().exit();
@@ -90,6 +94,14 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 		
 	}
 	
+	public static void quit(){gamecontainer.exit();}
+	
+	public static void changeState(int val){
+		sbg.enterState(val);
+	}
+	
+	
+
 	public boolean isPlaying(){
 		if(this.getCurrentState() == play){
 			return true;

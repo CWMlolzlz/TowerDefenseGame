@@ -1,5 +1,8 @@
 package game;
 
+import gui.Branch;
+import gui.MenuButton;
+
 import java.util.ArrayList;
 
 import org.lwjgl.input.Mouse;
@@ -14,8 +17,10 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class Menu extends BasicGameState{
+public class MainMenu extends BasicGameState{
 
+	private final int QUIT = 0, PLAY = 1, RESUME = 2, OPTIONS = 3;
+	
 	public static int width;
 	public static int height;
 	public static int my,mx;
@@ -23,29 +28,31 @@ public class Menu extends BasicGameState{
 	
 	public static MenuButton play;
 	
+	public ArrayList<Branch> branches = new ArrayList<Branch>();
 	public ArrayList<MenuButton> buttons = new ArrayList<MenuButton>();
 	
-	public Menu(int menu) {
-		
-	}
-
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
 		width = gc.getWidth();
-		play = new MenuButton(new Image("play_button.png"), 100, 100, Launch.PLAY);
+		//play = new MenuButton(new Image("play_button.png"), 100, 100, Launch.PLAY);
 		
-		buttons.add(play);
-		
-		
+		buttons.add(new MenuButton("QUIT",100,0,QUIT));
+		buttons.add(new MenuButton("Play",0,0,PLAY));
+		branches.add(new Branch(buttons));
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
-		for(int i = 0; i < buttons.size(); i++){
-			MenuButton button = buttons.get(i);
-			button.getImage().draw(button.getX(), button.getY());
+		for(int i = 0; i < branches.size(); i++){
+			Branch b = branches.get(i);
+			for(int j = 0; j < b.buttons.size(); j++){
+				MenuButton button = b.buttons.get(j);
+				g.drawString(button.text, 0, 0);
+				g.draw(buttons.get(i).bounds);
+				//button.getImage().draw(button.getX(), button.getY());
+			}
 		}
 		
 				
@@ -53,8 +60,6 @@ public class Menu extends BasicGameState{
 		g.drawString("Mouse X: "+mx, 50, 50);
 		g.drawString("Mouse Y: "+my, 50, 70);
 		
-		g.setColor(Color.green);
-		g.draw(play.bounds);
 		g.draw(mousepoint);
 		
 	}
@@ -88,8 +93,20 @@ public class Menu extends BasicGameState{
 			MenuButton button = buttons.get(i);
 			if(button.bounds.contains(mousepoint)){
 				button.setButtonState(button.CLICK_MOUSE);
-				sbg.enterState(button.getEvent());
+				checkEvent(button.getEvent());
 			}
+		}
+		
+	}
+
+	private void checkEvent(int event) {
+		System.out.println(event);
+		switch(event){
+		
+		case(QUIT):Launch.quit();
+		case(PLAY):Launch.changeState(Launch.PLAY);
+		case(OPTIONS):
+		case(RESUME):
 		}
 		
 	}
@@ -97,52 +114,3 @@ public class Menu extends BasicGameState{
 }
 
 
-//button class
-class MenuButton{
-	
-	public final int NO_MOUSE = 0;
-	public final int HOVER_MOUSE = 1;
-	public final int CLICK_MOUSE = 2;
-	
-	private int BUTTONSTATE = NO_MOUSE;
-	private int EVENT;
-	
-	private static final int height = 64;
-	private static final int width = 256;
-	
-	private static Image[] subimgs = new Image[3];
-	
-	public Rectangle bounds;
-	private static int xpos,ypos;
-	
-	public MenuButton(Image image, int x, int y, int e) {
-		EVENT = e;
-		xpos = x;
-		ypos = y;
-		bounds = new Rectangle(x, y, width, height);
-		for(int i = 0; i < subimgs.length; i++){
-			subimgs[i] = image.getSubImage(0, (i*height), width, height); 
-		}
-		// TODO Auto-generated constructor stub
-	}
-
-	public int getX(){return xpos;}
-	public int getY(){return ypos;}
-	
-	public boolean mouseInButton(float x, float y){
-		if((xpos<x && x<xpos+width) && (ypos<y && y<ypos+height)){
-			return true;
-		}else{return false;}
-	}
-	
-	public Image getImage() {
-		// TODO Auto-generated method stub
-		return subimgs[BUTTONSTATE];
-	}
-	
-	public void setButtonState(int state){
-		BUTTONSTATE = state;
-	}
-	
-	public int getEvent(){return EVENT;}
-}

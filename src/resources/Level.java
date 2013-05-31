@@ -1,6 +1,7 @@
 package resources;
 
 import game.Play;
+import gui.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class Level {
 	public int currentWave = 1;
 	private int enemiesInWave;
 	public static int enemiesKilled;
-	private ProgressBar pb;
+	public static ProgressBar pb;
 	//private boolean waveStarted = false;
 	//private boolean waveComplete = false;
 	private Wave wave;
@@ -55,7 +56,7 @@ public class Level {
 	
 	public void loadLevel(String levelnum){
 		leveldata = new LevelData(levelnum);
-		
+		pb = new ProgressBar(breakTimeLimit);
 		waves = leveldata.getWaveData();
 		maximumWaves = waves.size();
 		
@@ -94,17 +95,18 @@ public class Level {
 	
 	public void update(){
 		if(delay == 60){delay = 0;}
-		
 		//wave
 		if(gamestage == WAVE){
 			waveStep();
 		}else if(gamestage == BREAK){
 			breaktick++;
+			pb.update(1);
 			if(breaktick == breakTimeLimit){
 				breaktick = 0;
 				startWave();
 			}
 		}
+		
 		//make turrets shoot
 		shoot();
 		//AI step
@@ -113,7 +115,7 @@ public class Level {
 		delay++;
 	}
 	
-	private void shoot() {
+	private void shoot(){
 		for(int i = 0; i < turrets.size(); i++){
 			Turret turret = turrets.get(i);
 			if(turret.placed == true){
@@ -148,19 +150,16 @@ public class Level {
 	public void startWave(){
 		spawners.clear();
 		System.out.println("new wave");
-		//if(gamestage == WAVE){
-			gamestage = WAVE;
-			enemiesKilled = 0;
-			//waveStarted = true;
-			//waveComplete = false;
-			wave = waves.get(currentWave-1);
-			for(int s = 0; s < wave.spawnData.size(); s++){
-				SpawnData sd = wave.spawnData.get(s);
-				enemiesInWave += sd.QUANTITY;
-				spawners.add(new Spawner(sd));
-			}
-			pb = new ProgressBar(enemiesInWave);
-		//}
+		gamestage = WAVE;
+		enemiesKilled = 0;
+		wave = waves.get(currentWave-1);
+		enemiesInWave = 0;
+		for(int s = 0; s < wave.spawnData.size(); s++){
+			SpawnData sd = wave.spawnData.get(s);
+			enemiesInWave += sd.QUANTITY;
+			spawners.add(new Spawner(sd));
+		}
+		pb = new ProgressBar(enemiesInWave);
 	}
 	
 	private void waveStep(){
@@ -172,9 +171,12 @@ public class Level {
 				//Play.enterState();
 				//completeLevel();
 				gamestage = COMPLETE;
+				
+			}else{
+				pb = new ProgressBar(breakTimeLimit);
+				gamestage = BREAK;
+				currentWave++;
 			}
-			gamestage = BREAK;
-			currentWave++;
 		}else{
 			for(int i = 0; i < spawners.size(); i++){
 				Spawner s = spawners.get(i);
@@ -190,7 +192,6 @@ public class Level {
 		}
 	}
 	
-	
 	private void completeLevel() {
 		// TODO Auto-generated method stub
 		
@@ -198,7 +199,7 @@ public class Level {
 
 	private void creditInterest(){
 		float c = Play.credits;
-		Play.credits += c*0.0002f;
+		Play.credits *= 1.0002f;
 	}
 
 	public void placeTurret(Turret turret) {
@@ -210,7 +211,7 @@ public class Level {
 		turrets.remove(target);
 	}
 	
-	public static void removeEnemy(Enemy e){enemies.remove(e);}	
+	public static void removeEnemy(Enemy e){enemies.remove(e);enemiesKilled++;pb.update(1);}	
 	public static void removeTurret(Turret t){turrets.remove(t);}
 	public static void removeBullet(Bullet b){bullets.remove(b);}
 	
@@ -224,31 +225,3 @@ public class Level {
 	
 }
 
-class ProgressBar{
-	
-	public Shape outline;
-	public Shape fill;
-	public String bottomtext;
-	public String toptext;
-	
-	public int percent;	
-	public int progress;
-	public int progressend;
-	private float ratio;
-	
-	private int x1 = 20, x2 = 780, y1 = 540, y2 = 560;
-	
-	public ProgressBar(int max){
-		progressend = max;
-		outline = new Rectangle(x1, y1, x2, y2);
-		fill = new Rectangle(x1,y1,x2,y2);
-		ratio = (x2-x1)/100;
-	}
-	
-	public void update(){
-		progress++;
-		percent = progress/progressend;
-		fill = new Rectangle(x1,y1,x1+(percent*ratio),y2);
-	}
-	
-}

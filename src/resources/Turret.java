@@ -77,34 +77,61 @@ public class Turret {
 		rangecircle = new Circle(x,y,range);
 	}	
 
-	public void fire() {
+	public void fire(){
 		Random generator = new Random();
 		ArrayList<Enemy> enemies = Level.getEnemies();
-		for(int i = 0; i < enemies.size(); i++){
-			Enemy enemy = enemies.get(i);
+		Enemy enemy = getNearestEnemy(enemies);
+		if(enemy != null){
 			float ex = enemy.x;
 			float ey = enemy.y;
 			float dx = ex - x;
 			float dy = ey - y;
 			int ymult = -1;
 			if(ey > y){ymult = 1;}
-			if(rangecircle.intersects(enemy.getShape()) && enemy.isAlive()){
-				float random = generator.nextFloat();
-				float distance = (float) Math.sqrt((dx*dx) + (dy*dy));
-				float angle = (float) (ymult*(Math.acos(dx/distance)) + Math.PI) + ((2*random)-1)*bullet.ACCURACY;
-				
-				float even = 0;
-				if(numofBullets%2 == 0){
-					even = 0.5f;
-				}
-				for(int j = 0; j< numofBullets; j++){
-					newBullet(angle + (j - numofBullets/2 + even)*splitshot);
-				}
-				break;
+			
+			float random = generator.nextFloat();
+			float distance = (float) Math.sqrt((dx*dx) + (dy*dy));
+			float angle = (float) (ymult*(Math.acos(dx/distance)) + Math.PI) + ((2*random)-1)*bullet.ACCURACY;
+			
+			float even = 0;
+			if(numofBullets%2 == 0){
+				even = 0.5f;
 			}
-		}	
+			
+			for(int j = 0; j< numofBullets; j++){
+				newBullet(angle + (j - numofBullets/2 + even)*splitshot);
+			}
+		}
+		
 	}
 	
+	private Enemy getNearestEnemy(ArrayList<Enemy> enemies){
+		ArrayList<Enemy> targets = new ArrayList<Enemy>();
+		for(int i = 0; i < enemies.size(); i++){
+			Enemy e = enemies.get(i);
+			if(rangecircle.intersects(e.getShape())){
+				targets.add(e);
+			}
+		}
+		
+		if(targets.size() == 0){
+			return null;
+		}else{
+			Enemy target = targets.get(0);
+			for(int i = 1; i < targets.size(); i++){				//MERGE BOTH FOR LOOPS FOR OPTIMISATION
+				Enemy t = targets.get(i);
+				if(target.currentsegment == t.currentsegment){
+					if(target.currentdistanceonsegment < t.currentdistanceonsegment){
+						target = t;
+					}
+				}else if(target.currentsegment < t.currentsegment){
+					target = t;
+				}
+			}
+			return target;
+		}
+	}
+
 	private void newBullet(float theta){
 		Level.bullets.add(new Bullet(bullet, damage, theta,x,y));
 	}

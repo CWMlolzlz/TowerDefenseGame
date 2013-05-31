@@ -14,18 +14,18 @@ public class Enemy {
 
 	//enemy data
 	private String name;
-	private float starthealth, health, sheild, speed, regen;
+	private float starthealth, health, shield, speed, regen;
 	private int ID,reward,cost;
 	
 	private int radius = 10;
 	public float x, y;
-	private int currentsegment = -1;
-	private float currentdistanceonsegment = 0;
+	public int currentsegment = -1;
+	public float currentdistanceonsegment = 0;
 	private float currentsegmentlength = 0;
 	private int totalsegments;
 	private double segmentangle;
 	
-	private HealthBar healthbar = new HealthBar(30,2, 1); //declared here to stop bugs
+	private HealthBar healthbar = new HealthBar(30, 4, 1, 1); //declared here to stop bugs
 		
 	private static ArrayList<Node> nodes;
 	private Circle shape;
@@ -38,7 +38,7 @@ public class Enemy {
 		
 		starthealth = etype.HEALTH;
 		health = starthealth;
-		sheild = etype.SHEILD;
+		shield = etype.SHIELD;
 		speed = etype.SPEED;
 		regen = etype.REGEN;
 		
@@ -46,7 +46,7 @@ public class Enemy {
 		cost = etype.COST;
 		
 		alive = true;
-		healthbar = new HealthBar(30,2, health);
+		healthbar = new HealthBar(30,2, health, shield);
 		shape = new Circle(x,y,radius);
 		nodes = n;
 		x = nodes.get(0).x;
@@ -63,7 +63,6 @@ public class Enemy {
 		if(health <= 0){
 			new Explosion(x,y);
 			Play.pay(reward);
-			Level.enemiesKilled++;
 			Level.removeEnemy(this);
 		}else{
 			if(health < starthealth){
@@ -86,7 +85,7 @@ public class Enemy {
 			}
 		
 			shape = new Circle(x,y,radius);
-			healthbar.update(x - 15, y-18, health);
+			healthbar.update(x - 15, y-15, health, shield);
 		}
 	}
 	
@@ -111,7 +110,13 @@ public class Enemy {
 	}
 
 	public void damage(int d, boolean beam){
-		health -= d;
+		if(shield < d){
+			health -= (d - shield);
+			shield = 0;
+		}else{
+			shield -= d;
+		}
+		
 		if(beam){
 			//beam particles effects
 		}else{
@@ -121,33 +126,36 @@ public class Enemy {
 	
 	public Shape getHealthBarShape(){return healthbar.getShape();}
 	public Color getHealthBarColor(){return healthbar.getColor();}
+	public Shape getShieldBarShape(){return healthbar.getShieldShape();}
 	
 }
 
 class HealthBar{
-	
+	private Shape shieldshape;
 	private Shape shape;
 	private float height;
 	private float width;
 	private Color color;
 	private float startHealth;
-	
-	public HealthBar(int w, int h, float health){
+	private float startshield;
+	public HealthBar(int w, int h, float health, float shield){
 		width = w;
 		height = h;
 		startHealth = health;
+		startshield = shield;
 	}
 	
-	public void update(float x, float y, float health){
+	public void update(float x, float y, float health, float shield){
 		int r = (int) (511- 2*(health / startHealth*255));
 		int g = (int) (2*health / startHealth*255);
 		int b = 0;
 		color = new Color(r,g,b);
-		
 		shape = new Rectangle(x, y, (health/startHealth)*width, height);
+		shieldshape = new Rectangle(x,y-height,(shield/startshield)*width,height);
 	}
 	
 	public Color getColor(){return color;}
 	public Shape getShape(){return shape;}
+	public Shape getShieldShape(){return shieldshape;}
 	
 }

@@ -50,16 +50,21 @@
 <WAVES>
 EnemyID	Amount	Frequency(ticks)	Delay(ticks)
 
-2		20		30					0
+0		10		60					0
 END
 
-0		10		30					0
+0		20		45					0
 END
-1		5		90					0
-0		20		60					540
+
+1		2		90					0
+0		20		60					60
 END
 
 2		100		20					0
+1 		5 		120 				0
+END
+
+3 		1 		1 					0
 END
 
 </WAVES>
