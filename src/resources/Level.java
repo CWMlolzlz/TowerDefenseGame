@@ -46,16 +46,13 @@ public class Level {
 	private static ArrayList<Turret> turrets = new ArrayList<Turret>(); //optimise make static
 	private static ArrayList<Node> nodes = new ArrayList<Node>(); //optimise make static
 	private static ArrayList<Enemy> enemies = new ArrayList<Enemy>(); //optimise make static
-	
-	public void newLevel(){
+		
+	public void loadLevel(String levelpath){
 		enemies.clear();
 		nodes.clear();
 		turrets.clear();
 		bullets.clear();
-	}
-	
-	public void loadLevel(String levelnum){
-		leveldata = new LevelData(levelnum);
+		leveldata = new LevelData(levelpath);
 		pb = new ProgressBar(breakTimeLimit);
 		waves = leveldata.getWaveData();
 		maximumWaves = waves.size();

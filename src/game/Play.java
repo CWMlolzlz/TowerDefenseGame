@@ -64,12 +64,14 @@ public class Play extends BasicGameState{
 	
 	public static float credits = 150;
 	
-	public Level level;
+	public Level level = new Level();
 	
 	//onscreen enitites
 		
-	public Play(int state){
-		level = new Level();
+	public void loadLevel(String path){
+		level.loadLevel(path);
+		TDATA.loadUpgrades();
+		EDATA.loadEnemyTypes();
 	}
 	
 	@Override
@@ -77,7 +79,6 @@ public class Play extends BasicGameState{
 			throws SlickException {
 		gamecont = gc;
 		statebasedgame = sbg;
-		System.out.println("new level");
 		try {
 			ce = ParticleIO.loadEmitter(psXML);
 		} catch (IOException e) {
@@ -90,7 +91,6 @@ public class Play extends BasicGameState{
 			
 		//input
 		i = gc.getInput();
-		level.loadLevel("01");
 		//font = new AngelCodeFont("fonts/squared_12.fnt", new Image("fonts/squared_12_0.png"));
 		screenWidth = gc.getWidth();
 		screenHeight = gc.getHeight();

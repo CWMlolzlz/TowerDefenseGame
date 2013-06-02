@@ -13,16 +13,15 @@ public class TurretType{
 	private String colornumbers;
 	private int r,g,b;
 	
-	public TurretType(String[] line){//optimise graphic and color datatypes
-		ID = Integer.parseInt(line[0]); //fix line reading to exclude tabs
-		NAME = line[1];
-		COST = Integer.parseInt(line[2]);
-		bDamage = Integer.parseInt(line[3]);
-		bRange = Integer.parseInt(line[4]);
-		bRateOfFire = Float.parseFloat(line[5]);
-		numofBULLETS = Integer.parseInt(line[6]);
-		BULLETTYPE = Integer.parseInt(line[7]);
-		colornumbers = line[8];
+	public TurretType(int id, String name, int cost, int damage, int range, int rof, int bullets, int bulletID, String colornumbers){//optimise graphic and color datatypes
+		ID = id;
+		NAME = name;
+		COST = cost;
+		bDamage = damage;
+		bRange = range;
+		bRateOfFire = rof;
+		numofBULLETS = bullets;
+		BULLETTYPE = bulletID;
 		//color
 		String[] colorline = colornumbers.split("-");
 		

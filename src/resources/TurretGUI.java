@@ -63,16 +63,16 @@ public class TurretGUI {
 	public void loadUpgrades(){
 		buttons.clear();
 		//upgrade options
-		UpgradeBranch branch = tdata.getUpgradeBranches(target.getID());
+		int[] branches = tdata.getUpgradeBranches(target.getID());
 		TurretType turrettype;
-		for(int b = 0; b < 3; b++){ //three options available at max
-			int upgradeID = branch.getBranch(b);
-			if(upgradeID >= 0){
-				turrettype = tdata.getTurretType(upgradeID);
-				int cost = turrettype.COST;
-				String text = turrettype.NAME + " (" + cost + ")";
-				buttons.add(new Button(GUIx + left*(10), GUIy + left*(10 + b*30), GUIwidth-20, 20, text, upgradeID, cost));
-			}	
+		
+		for(int b = 0; b < branches.length; b++){ //three options available at max
+			int upgradeID = branches[b];
+			turrettype = tdata.getTurretType(upgradeID);
+			int cost = turrettype.COST;
+			String text = turrettype.NAME + " (" + cost + ")";
+			buttons.add(new Button(GUIx + left*(10), GUIy + left*(10 + b*30), GUIwidth-20, 20, text, upgradeID, cost));
+				
 		}
 		
 		//typical buttons

@@ -13,17 +13,17 @@ public class EnemyType{
 	public int REWARD;
 	public int COST; //explicitly for multiplayer and level/swarm editor
 	
-	public EnemyType(String[] line){
-		ID = Integer.parseInt(line[0]);
-		NAME = line[1];
+	public EnemyType(int id, String name, int health, int shield, float speed, float regen, int reward, int cost){
+		ID = id;
+		NAME = name;
 		
-		HEALTH = Integer.parseInt(line[2]);
-		SHIELD = Integer.parseInt(line[3]);
-		SPEED = Float.parseFloat(line[4]);
-		REGEN = Float.parseFloat(line[5]);
+		HEALTH = health;
+		SHIELD = shield;
+		SPEED = speed;
+		REGEN = regen;
 		
-		REWARD = Integer.parseInt(line[6]);
-		COST = Integer.parseInt(line[7]);
+		REWARD = reward;
+		COST = cost;
 	}
 	
 }

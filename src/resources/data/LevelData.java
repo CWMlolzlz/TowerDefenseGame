@@ -10,7 +10,7 @@ import resources.Wave;
 
 public class LevelData{
 
-	private String levelnum;
+	private String levelpath;
 	
 	private ArrayList<Node> path = new ArrayList<Node>();
 	private ArrayList<Node> edgeA = new ArrayList<Node>();
@@ -19,13 +19,13 @@ public class LevelData{
 	private ArrayList<Wave> waves = new ArrayList<Wave>();
 	
 	public LevelData(String p){
-		levelnum = p;
+		levelpath = p;
 		loadLevelData();
 	}
 	
 	private void loadLevelData(){
 		try{
-			Scanner scanner = new Scanner(new File("data/levels/level_"+levelnum+".DATA"));
+			Scanner scanner = new Scanner(new File(levelpath));
 			loadNodes(scanner);
 			loadSpawnWaves(scanner);
 		}catch(FileNotFoundException e){
@@ -41,12 +41,8 @@ public class LevelData{
 			}
 		}
 		readNodes(sc, path, "PATH");
-		System.out.println("Path done");
 		readNodes(sc, edgeA, "EDGEA");
-		System.out.println("A done");
-		readNodes(sc, edgeB, "EDGEB");
-		System.out.println("B done");
-		
+		readNodes(sc, edgeB, "EDGEB");	
 	}
 	
 	private void readNodes(Scanner sc, ArrayList<Node> list, String tag){
@@ -78,7 +74,6 @@ public class LevelData{
 		sc.nextLine();
 		while(sc.hasNextLine()){
 			String line = sc.nextLine();
-			System.out.println(line);
 			if(line.contains("</WAVES>")){
 				break;
 			}

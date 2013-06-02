@@ -1,8 +1,6 @@
 package gui.menus;
 
 import game.MainMenu;
-import gui.Menu;
-import gui.MenuButton;
 
 public class Options extends Menu{
 	

@@ -1,5 +1,7 @@
 package gui;
 
+import gui.menus.MenuButton;
+
 import java.util.ArrayList;
 
 import org.newdawn.slick.Graphics;

@@ -1,4 +1,4 @@
-package gui;
+package gui.menus;
 
 import game.MainMenu;
 
@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
+
+import resources.data.LevelListData;
 
 public class Menu{
 
@@ -30,7 +32,6 @@ public class Menu{
 			MenuButton button = buttons.get(j);
 			g.drawString(button.text, button.xpos, button.ypos);
 			g.draw(button.shape);
-		
 		}
 	}
 	

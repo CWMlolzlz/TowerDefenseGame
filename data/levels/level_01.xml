@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<Level>
+	<NODES>
+
+	<PATH>
+	<Start x="-30" y="100"/>
+	<Point x="0" y="100"/>
+	<Point x="500" y="100"/>
+	<Point x="500" y="300"/>
+	<Point x="300" y="200"/>
+	<Point x="100" y="200"/>
+	<Point x="100" y="500"/>
+	<Point x="200" y="450"/>
+	<Point x="600" y="450"/>
+	<Point x="600" y="100"/>
+	<Point x="700" y="100"/>
+	<Point x="700" y="650"/>
+	</PATH>
+
+<EDGEA>
+000 080
+520 080
+520 320
+500 320
+300 220
+120 220
+120 470
+200 430
+580 430
+580 080
+720 080
+720 600
+</EDGEA>
+
+<EDGEB>
+000 120
+480 120
+480 270
+300 180
+080 180
+080 520
+100 520
+200 470
+620 470
+620 120
+680 120
+680 600
+</EDGEB>
+
+</NODES>
+
+<WaveData>
+EnemyID	Amount	Frequency(ticks)	Delay(ticks)
+
+<Wave>
+	<Spawn enemyID="0" quantity="10" freq="60" delay="0"/>
+</Wave>
+
+0		20		45					0
+END
+
+1		2		90					0
+0		20		60					60
+END
+
+2		100		20					0
+1 		5 		120 				0
+END
+
+3 		1 		1 					0
+END
+
+</WaveData>
+</Level>

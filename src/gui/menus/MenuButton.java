@@ -1,4 +1,4 @@
-package gui;
+package gui.menus;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
@@ -14,7 +14,7 @@ public class MenuButton{
 	private int EVENT;
 	
 	private static final int height = 30;
-	private static final int width = 60;
+	private static final int width = 160;
 	
 	private Image[] subimgs = new Image[3];
 	public String text;
@@ -22,6 +22,7 @@ public class MenuButton{
 	public Rectangle shape;
 	public float xpos, ypos;
 	
+	public String levelpath;
 	
 	public MenuButton(String string, float x, float y, int e) {
 		text = string;
@@ -31,13 +32,20 @@ public class MenuButton{
 		shape = new Rectangle(x, y, width, height);
 	}
 
-	public float getX(){return xpos;}
-	public float getY(){return ypos;}
-	
+	public MenuButton(String string, String path, float x, float y) {
+		text = string;
+		xpos = x;
+		ypos = y;
+		levelpath = path;
+		shape = new Rectangle(x, y, width, height);
+	}
+
 	public boolean mouseInButton(float x, float y){
 		if((xpos<x && x<xpos+width) && (ypos<y && y<ypos+height)){
 			return true;
-		}else{return false;}
+		}else{
+			return false;
+		}
 	}
 	
 	public Image getImage() {
@@ -49,5 +57,7 @@ public class MenuButton{
 		BUTTONSTATE = state;
 	}
 	
-	public int getEvent(){return EVENT;}
+	public int getEvent(){
+		return EVENT;
+	}
 }

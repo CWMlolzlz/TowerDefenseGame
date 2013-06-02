@@ -25,8 +25,8 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 	public static final int MENU = 0; 
 	public static final int PLAY = 1;
 	
-	private Play play = new Play(PLAY);
-	private MainMenu menu = new MainMenu();
+	private static Play play = new Play();
+	private static MainMenu menu = new MainMenu();
 	
 	public static GameContainer gamecontainer;
 	private static StateBasedGame sbg;
@@ -108,5 +108,10 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 		}else{
 			return false;
 		}
+	}
+
+	public static void playLevel(String levelpath) {
+		play.loadLevel(levelpath);
+		changeState(PLAY);
 	}	
 }

@@ -1,9 +1,10 @@
 package game;
 
-import gui.Menu;
-import gui.MenuButton;
 import gui.menus.LevelSelect;
+import gui.menus.LevelSelectButton;
 import gui.menus.Levels;
+import gui.menus.Menu;
+import gui.menus.MenuButton;
 import gui.menus.Options;
 import gui.menus.Top;
 
@@ -19,6 +20,8 @@ import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import resources.data.LevelListData;
+
 public class MainMenu extends BasicGameState{
 
 	public static final int QUIT = 0, PLAY = 1, OPTIONS = 2;
@@ -29,11 +32,11 @@ public class MainMenu extends BasicGameState{
 	public static int height;
 	public static int my,mx;
 	public static Point mousepoint = new Point(Mouse.getX(), Mouse.getY());
-	
+	public static LevelListData levellistdata = new LevelListData();
 	public ArrayList<Menu> menus = new ArrayList<Menu>();
 	
 	public MainMenu(){
-		menus.add(new Top(0,0));
+		
 	}
 	
 	
@@ -41,6 +44,9 @@ public class MainMenu extends BasicGameState{
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
 		width = gc.getWidth();
+		
+		menus.add(new Top(0,0));
+		levellistdata.loadLevelData();
 		
 		//play = new MenuButton(new Image("play_button.png"), 100, 100, Launch.PLAY);
 		
@@ -82,7 +88,12 @@ public class MainMenu extends BasicGameState{
 			if(m.outline.contains(mousepoint)){
 				MenuButton b = m.getClickedButton();
 				if(b != null){
-					checkEvent(b.getEvent());
+					if(b instanceof LevelSelectButton){
+						System.out.println(b.levelpath);
+						Launch.playLevel(b.levelpath);
+					}else{
+						checkEvent(b.getEvent());
+					}
 				}
 			}
 		}
@@ -108,21 +119,17 @@ public class MainMenu extends BasicGameState{
 				break;
 			case(RESUME):
 				break;
-			
-			//resume
-			
-			//options
-			//case(VIDEO):menus.add(new Video(menus.size()*200,0));
-			//case(AUDIO):
 		}
 		
 	}
 
 
 	private void removeMenus(int val) {
-		for(int i = val; i < menus.size(); i++){
-			menus.remove(i);
+		ArrayList<Menu> newmenus = new ArrayList<Menu>();
+		for(int i = 0; i < val; i++){
+			newmenus.add(menus.get(i));
+			
 		}
-		
+		menus = newmenus;
 	}
 }
