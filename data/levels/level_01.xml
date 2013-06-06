@@ -1,74 +1,71 @@
 <?xml version="1.0"?>
 <Level>
-	<NODES>
+<PathPoints>
+		<Path>
+			<Point x="-30" y="100"/>
+			<Point x="0" y="100"/>
+			<Point x="500" y="100"/>
+			<Point x="500" y="300"/>
+			<Point x="300" y="200"/>
+			<Point x="100" y="200"/>
+			<Point x="100" y="500"/>
+			<Point x="200" y="450"/>
+			<Point x="600" y="450"/>
+			<Point x="600" y="100"/>
+			<Point x="700" y="100"/>
+			<Point x="700" y="650"/>
+		</Path>
+		<Edge>
+			<Point x="0" y="80"/>
+			<Point x="520" y="80"/>
+			<Point x="520" y="320"/>
+			<Point x="500" y="320"/>
+			<Point x="300" y="220"/>
+			<Point x="120" y="220"/>
+			<Point x="120" y="470"/>
+			<Point x="200" y="430"/>
+			<Point x="580" y="430"/>
+			<Point x="580" y="80"/>
+			<Point x="720" y="80"/>
+			<Point x="720" y="600"/>
+		</Edge>
+		<Edge>
+			<Point x="0" y="120"/>
+			<Point x="480" y="120"/>
+			<Point x="480" y="270"/>
+			<Point x="300" y="180"/>
+			<Point x="80" y="180"/>
+			<Point x="80" y="520"/>
+			<Point x="100" y="520"/>
+			<Point x="200" y="470"/>
+			<Point x="620" y="470"/>
+			<Point x="620" y="120"/>
+			<Point x="680" y="120"/>
+			<Point x="680" y="600"/>
+		</Edge>
+	</PathPoints>
 
-	<PATH>
-	<Start x="-30" y="100"/>
-	<Point x="0" y="100"/>
-	<Point x="500" y="100"/>
-	<Point x="500" y="300"/>
-	<Point x="300" y="200"/>
-	<Point x="100" y="200"/>
-	<Point x="100" y="500"/>
-	<Point x="200" y="450"/>
-	<Point x="600" y="450"/>
-	<Point x="600" y="100"/>
-	<Point x="700" y="100"/>
-	<Point x="700" y="650"/>
-	</PATH>
+	<WaveData>
+	<Wave>
+		<Spawn enemyID="0" quantity="10" freq="60" delay="0"/>
+	</Wave>
 
-<EDGEA>
-000 080
-520 080
-520 320
-500 320
-300 220
-120 220
-120 470
-200 430
-580 430
-580 080
-720 080
-720 600
-</EDGEA>
+	<Wave>
+		<Spawn enemyID="0" quantity="20" freq="45" delay="0"/>
+	</Wave>
 
-<EDGEB>
-000 120
-480 120
-480 270
-300 180
-080 180
-080 520
-100 520
-200 470
-620 470
-620 120
-680 120
-680 600
-</EDGEB>
+	<Wave>
+		<Spawn enemyID="0" quantity="20" freq="60" delay="120"/>
+		<Spawn enemyID="1" quantity="5" freq="90" delay="0"/>
+	</Wave>
 
-</NODES>
-
-<WaveData>
-EnemyID	Amount	Frequency(ticks)	Delay(ticks)
-
-<Wave>
-	<Spawn enemyID="0" quantity="10" freq="60" delay="0"/>
-</Wave>
-
-0		20		45					0
-END
-
-1		2		90					0
-0		20		60					60
-END
-
-2		100		20					0
-1 		5 		120 				0
-END
-
-3 		1 		1 					0
-END
-
-</WaveData>
+	<Wave>
+		<Spawn enemyID="1" quantity="10" freq="120" delay="0"/>
+		<Spawn enemyID="2" quantity="50" freq="20" delay="0"/>
+	</Wave>
+	
+	<Wave>
+		<Spawn enemyID="3" quantity="3" freq="360" delay="0"/>
+	</Wave>
+	</WaveData>
 </Level>

@@ -21,9 +21,7 @@ public class LevelSelect extends Menu{
 			String text = linfo.NAME;
 			String description = linfo.DESCRIPTION;
 			String path = linfo.PATH;
-			System.out.println(path);
 			addButton(new LevelSelectButton(text, path, x + 20, +((i+1)*50)));
-			//buttons.add(new LevelSelectButton(text, id, x + 20, +((i+1)*50)));
 		}	
 	}
 	

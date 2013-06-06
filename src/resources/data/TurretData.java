@@ -8,11 +8,7 @@ import java.util.Scanner;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 
 import resources.types.BulletType;
 import resources.types.TurretType;
@@ -59,16 +55,13 @@ public class TurretData{
 			}
 			//upgrade branches			
 			NodeList upgradeNodes = doc.getElementsByTagName("UpgradeBranches").item(0).getChildNodes();//get <Upgrade>...</Upgrade> nodes
-			System.out.println(upgradeNodes.getLength() + " upgrade Nodes");
-			
+						
 			for(int i = 0; i < upgradeNodes.getLength();i++){
 				
 				Node upgradeNode = upgradeNodes.item(i);
-				System.out.println("Current Element: " + upgradeNode.getNodeName());
 				if(upgradeNode.getNodeName() == "Upgrade"){
 					Element eUpgrade = (Element) upgradeNode;
 					int ID = Integer.parseInt(eUpgrade.getAttribute("id"));
-					System.out.println(ID);
 					NodeList contents = upgradeNode.getChildNodes();
 					ArrayList<Integer> branchResults = new ArrayList<Integer>();
 					for(int j = 0; j < contents.getLength(); j++){
@@ -95,101 +88,31 @@ public class TurretData{
 			
 			
 			//bullet types
-			NodeList bulletTypeList = doc.getElementsByTagName("BulletTypes");
-			
+			Node bulletTypeNode = doc.getElementsByTagName("BulletTypes").item(0);
+						
+			NodeList bulletNodes = bulletTypeNode.getChildNodes(); // <Turret> nodes
+			for(int i = 0; i < bulletNodes.getLength(); i++){
+				Node contentsNode = bulletNodes.item(i); //<Turret> node
+				if(contentsNode.getNodeType() == Node.ELEMENT_NODE){
+					Element eElement = (Element) contentsNode;
+					int id = Integer.parseInt(eElement.getAttribute("id"));
+					String gName = eElement.getAttribute("graphicName");
+					String color = eElement.getAttribute("color");
+					int speed = Integer.parseInt(eElement.getAttribute("speed"));
+					float accuracy = Float.parseFloat(eElement.getAttribute("accuracy"));
+										
+					bullettypes.add(new BulletType(id,gName,color,speed,accuracy));
+					
+				}
+			}
 				
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			//System.out.println(e);
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		try{
-			Scanner scanner = new Scanner(new File("data/turretdata.DATA"));
-			//loadTurretTypes(scanner);
-			//loadUpgradeBranches(scanner);
-			loadBulletTypes(scanner);
-		}catch(FileNotFoundException e){
-			e.printStackTrace();
-		}		
-	}
+		}
 	
-	private String getNodeVal(NodeList nl, int index){
-		Node node = nl.item(index);
-		if(node.getNodeType() == Node.ELEMENT_NODE){
-			Element e = (Element) node;
-			return e.getAttribute("val");
-		}
-		return null;
-	}
 	
-	private void loadTurretTypes(Scanner sc){//optimise load functions to take ArrayList to add to and String to look for
-		
-		while(sc.hasNextLine()){
-			if(sc.nextLine().contains("<TURRETDATA>")){
-				break;
-			}
-		}
-		sc.nextLine();//skips layout info
-		while(sc.hasNextLine()){
-			String line = sc.nextLine();
-			if(line.contains("</TURRETDATA>")){
-				break;
-			}else{
-				String[] splitline = line.split("\\s+");
-				//turrettypes.add(new TurretType(splitline));
-			}
-		}
-	}
-	
-	private void loadUpgradeBranches(Scanner sc){//optimise load functions to take ArrayList to add to and String to look for
-		
-		while(sc.hasNextLine()){
-			if(sc.nextLine().contains("<UPGRADES>")){
-				break;
-			}
-		}
-		sc.nextLine();//skips layout info
-		while(sc.hasNextLine()){
-			String line = sc.nextLine();
-			if(line.contains("</UPGRADES>")){
-				break;
-			}else{
-				String[] splitline = line.split("\\s+");
-				//upgrades.add(new UpgradeBranch(splitline));
-			}
-		}
-		
-	}
-	
-	private void loadBulletTypes(Scanner sc){//optimise load functions to take ArrayList to add to and String to look for
-		
-		while(sc.hasNextLine()){
-			if(sc.nextLine().contains("<BULLETTYPES>")){
-				break;
-			}
-		}
-		sc.nextLine(); //skips layout info
-		while(sc.hasNextLine()){
-			String line = sc.nextLine();
-			if(line.contains("</BULLETTYPES>")){
-				break;
-			}else{
-				String[] splitline = line.split("\\s+");
-				bullettypes.add(new BulletType(splitline));
-			}
-		}
-		
-	}
-
 	
 	public int[] getUpgradeBranches(int turretID){
 		return upgrades.get(turretID);

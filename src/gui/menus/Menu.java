@@ -4,6 +4,7 @@ import game.MainMenu;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
@@ -27,6 +28,9 @@ public class Menu{
 	
 	
 	public void draw(Graphics g) {
+		g.setColor(Color.black);
+		g.fill(outline);
+		g.setColor(Color.white);
 		g.draw(outline);
 		for(int j = 0; j < buttons.size(); j++){
 			MenuButton button = buttons.get(j);
@@ -42,9 +46,8 @@ public class Menu{
 		outline  = new Rectangle(x,y,width,height);
 	}
 
-
-	public MenuButton getClickedButton() {
-		Shape mp = MainMenu.mousepoint;
+	
+	public MenuButton getClickedButton(Shape mp) {
 		for(int i = 0; i < buttons.size(); i++){
 			MenuButton b = buttons.get(i);
 			if(b.shape.contains(mp)){

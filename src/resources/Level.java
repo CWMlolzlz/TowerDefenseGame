@@ -22,34 +22,32 @@ public class Level {
 	private ArrayList<Wave> waves;
 	private ArrayList<Spawner> spawners = new ArrayList<Spawner>();
 	
-	public static int gamestage;
-	public static int BREAK = 0, WAVE = 1, COMPLETE = 2;
+	public static short gamestage;
+	public static short BREAK = 0, WAVE = 1, COMPLETE = 2;
 	private int breaktick = 0, breakTimeLimit = 300;
 	
 	public String levelname;
 	public Polygon path = new Polygon(); //path is used strictly for drawing
-	public Polygon pathedgeA = new Polygon();
-	public Polygon pathedgeB = new Polygon();
+	
 		
 	public int maximumWaves;
 	public int currentWave = 1;
 	private int enemiesInWave;
 	public static int enemiesKilled;
 	public static ProgressBar pb;
-	//private boolean waveStarted = false;
-	//private boolean waveComplete = false;
 	private Wave wave;
 	
 	public static int delay = 0;
 	
 	public static ArrayList<Bullet> bullets = new ArrayList<Bullet>(); //optimise make static
 	private static ArrayList<Turret> turrets = new ArrayList<Turret>(); //optimise make static
-	private static ArrayList<Node> nodes = new ArrayList<Node>(); //optimise make static
+	private static ArrayList<PathPoint> PathPoints = new ArrayList<PathPoint>(); //optimise make static
 	private static ArrayList<Enemy> enemies = new ArrayList<Enemy>(); //optimise make static
+	public static ArrayList<Shape> edges = new ArrayList<Shape>();
 		
 	public void loadLevel(String levelpath){
 		enemies.clear();
-		nodes.clear();
+		PathPoints.clear();
 		turrets.clear();
 		bullets.clear();
 		leveldata = new LevelData(levelpath);
@@ -58,26 +56,14 @@ public class Level {
 		maximumWaves = waves.size();
 		
 		//create Path
-		nodes = leveldata.getPath();
-		for(int i = 0; i < nodes.size(); i++){
-			Node node = nodes.get(i);
-			path.addPoint(node.x, node.y);
+		PathPoints = leveldata.getPath();
+		for(int i = 0; i < PathPoints.size(); i++){
+			PathPoint PathPoint = PathPoints.get(i);
+			path.addPoint(PathPoint.x, PathPoint.y);
 		}
 		path.setClosed(false);
 		
-		ArrayList<Node> edgeA = leveldata.getEdgeA();
-		for(int A = 0; A < edgeA.size(); A++){
-			Node n = edgeA.get(A);
-			pathedgeA.addPoint(n.x, n.y);
-		}
-		pathedgeA.setClosed(false);
-		
-		ArrayList<Node> edgeB = leveldata.getEdgeB();
-		for(int B = 0; B < edgeB.size(); B++){
-			Node n = edgeB.get(B);
-			pathedgeB.addPoint(n.x, n.y);
-		}
-		pathedgeB.setClosed(false);
+		edges = leveldata.getEdges();
 		
 		try{
 			ce = ParticleIO.loadEmitter(new File("data/particles/glow.xml"));
@@ -105,26 +91,19 @@ public class Level {
 		}
 		
 		//make turrets shoot
-		shoot();
+		for(int i = 0; i < turrets.size(); i++){
+			Turret turret = turrets.get(i);
+			
+			if(turret.placed == true){
+				turret.fire();
+			}
+		}
 		//AI step
 		AIStep();
 		
 		delay++;
 	}
 	
-	private void shoot(){
-		for(int i = 0; i < turrets.size(); i++){
-			Turret turret = turrets.get(i);
-			if(turret.placed == true){
-				float rof = turret.getRateOfFire();
-				if(delay%(60*(1/rof)) == 0){
-					turret.fire();
-				}
-			}
-		}
-		
-	}
-
 	private void AIStep(){
 		for(int i = 0; i < enemies.size(); i++){
 			Enemy e = enemies.get(i);
@@ -146,7 +125,6 @@ public class Level {
 	
 	public void startWave(){
 		spawners.clear();
-		System.out.println("new wave");
 		gamestage = WAVE;
 		enemiesKilled = 0;
 		wave = waves.get(currentWave-1);
@@ -180,7 +158,7 @@ public class Level {
 				s.update();
 				if(s.isEnabled()){
 					if(s.doSpawn() != null){
-						enemies.add(new Enemy(nodes,s.enemytype));
+						enemies.add(new Enemy(PathPoints,s.enemytype));
 					}
 				}else{
 					spawners.remove(s);
@@ -194,7 +172,7 @@ public class Level {
 	}
 
 	private void creditInterest(){
-		Play.credits *= 1.0002f;
+		Play.credits *= 1.0001f;
 	}
 
 	public void placeTurret(Turret turret) {
@@ -211,8 +189,8 @@ public class Level {
 	public static void removeBullet(Bullet b){bullets.remove(b);}
 	
 	public Shape getPath(){return path;}
-	public Shape getEdgeA(){return pathedgeA;}
-	public Shape getEdgeB(){return pathedgeB;}
+	//public Shape getEdgeA(){return pathedgeA;}
+	//public Shape getEdgeB(){return pathedgeB;}
 	public static ArrayList<Enemy> getEnemies(){return enemies;}
 	public static ArrayList<Turret> getTurrets(){return turrets;}
 	public static ArrayList<Bullet> getBullets() {return bullets;}

@@ -1,6 +1,8 @@
 package game;
 
+import gui.PauseMenu;
 import gui.ProgressBar;
+import gui.menus.MenuButton;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +17,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.command.InputProvider;
 import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.particles.ConfigurableEmitter;
 import org.newdawn.slick.particles.ParticleIO;
@@ -35,6 +38,7 @@ import resources.data.TurretData;
 
 public class Play extends BasicGameState{
 
+	public static final int RESUME = 0, QUIT = 9;
 	public static TurretData TDATA = new TurretData();
 	public static EnemyData EDATA = new EnemyData();
 	public static ParticleSystem ps;
@@ -54,6 +58,8 @@ public class Play extends BasicGameState{
 	public Input i;
 	public InputProvider provider;
 	
+	private PauseMenu pmenu;
+	
 	public static Circle mp = new Circle(Mouse.getX(), Mouse.getY(), 3f);
 	
 	private TurretGUI tGUI = null;
@@ -61,7 +67,8 @@ public class Play extends BasicGameState{
 	private Turret selectedTurret = null;
 	
 	public static int selectstatus;
-	
+	public boolean paused = false;
+		
 	public static float credits = 150;
 	
 	public Level level = new Level();
@@ -72,11 +79,13 @@ public class Play extends BasicGameState{
 		level.loadLevel(path);
 		TDATA.loadUpgrades();
 		EDATA.loadEnemyTypes();
+		Mouse.setGrabbed(true);
 	}
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
+		
 		gamecont = gc;
 		statebasedgame = sbg;
 		try {
@@ -117,8 +126,11 @@ public class Play extends BasicGameState{
 		//g.setColor(Color.cyan);
 		//g.draw(level.getPath());
 		g.setColor(Color.blue);
-		g.draw(level.getEdgeA());
-		g.draw(level.getEdgeB());
+		for(int i = 0; i < level.edges.size(); i++){
+			g.draw(level.edges.get(i));
+		}
+		//g.draw(level.getEdgeA());
+		//g.draw(level.getEdgeB());
 		
 		//enemies
 		g.setColor(Color.white);
@@ -201,10 +213,15 @@ public class Play extends BasicGameState{
 			}
 		}
 		
+		if(pmenu != null){
+			pmenu.draw(g);
+		}else{
+			g.draw(mp);
+		}
 		
 		//cursor
 		g.setColor(Color.white);
-		g.draw(mp);
+		
 			
 	}
 
@@ -212,10 +229,10 @@ public class Play extends BasicGameState{
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
 		
-		Mouse.setGrabbed(true);
 		
-		Turret collidingturret = getCollidingTurret(mp);
 		mp = new Circle(Mouse.getX(), gc.getHeight()-Mouse.getY(), 3f);
+		if(!paused){
+		Turret collidingturret = getCollidingTurret(mp);
 		//TURRET PLACING POSITION
 		if(tOnHand != null){
 			tOnHand.updatePlacement(mp.getCenterX(), mp.getCenterY());
@@ -246,48 +263,72 @@ public class Play extends BasicGameState{
 		for(int e = 0; e < explosions.size(); e++){
 			explosions.get(e).updateDecay();
 		}
+		}
 		
 	}
 		
 	public void leftClick(StateBasedGame sbg) {
+		
+		if(paused){
+			clickedPauseMenu();
+		}else{
+			clickedLevel();
+		}
+	}
+	
+	private void clickedPauseMenu() {
+		MenuButton mb = pmenu.getClickedButton(new Point(mp.getCenterX(),mp.getCenterY()));
+		if(mb != null){
+			int e = mb.getEvent();
+			switch(e){
+			case(RESUME):
+				togglePause();
+				break;
+			case(QUIT):
+				Launch.quit();
+			}
+		}
+
+	}
+
+	private void clickedLevel(){
 		switch(selectstatus){
-			case(NONE): //NONE ==> BUILDING
-				tOnHand = new Turret();
-				selectstatus = BUILDINGTURRET;
-				break;
-			case(BUILDINGTURRET): //BUILDING ==> NONE
-				if(tOnHand.valid && credits >= 100){ //optimise detection for both cases
-					//can place turret
-					level.placeTurret(tOnHand);
-					credits -= 100;
-				}else{
-					//cant place turret
-					selectstatus = NONE;
-					
-				}
-				tOnHand = null;
+		case(NONE): //NONE ==> BUILDING
+			tOnHand = new Turret();
+			selectstatus = BUILDINGTURRET;
+			break;
+		case(BUILDINGTURRET): //BUILDING ==> NONE
+			if(tOnHand.valid && credits >= 100){ //optimise detection for both cases
+				//can place turret
+				level.placeTurret(tOnHand);
+				credits -= 100;
+			}else{
+				//cant place turret
 				selectstatus = NONE;
-				break;
-			case(HOVERTURRET): //HOVERING ==> EDITING
-				System.out.println("Click3");
-				if(tOnHand == null){
-					selectstatus = EDITINGTURRET;
-					selectedTurret = getCollidingTurret(mp);
-					tGUI = new TurretGUI(selectedTurret, gamecont);
-				}
-				break;
-			case(EDITINGTURRET):
-				System.out.println("Click4");
-				selectObject();
-				break;
-		}		
+				
+			}
+			tOnHand = null;
+			selectstatus = NONE;
+			break;
+		case(HOVERTURRET): //HOVERING ==> EDITING
+			
+			if(tOnHand == null){
+				selectstatus = EDITINGTURRET;
+				selectedTurret = getCollidingTurret(mp);
+				tGUI = new TurretGUI(selectedTurret, gamecont);
+			}
+			break;
+		case(EDITINGTURRET):
+			selectObject();
+			break;
+		}
 	}
 	
 	public void selectObject(){
 		Turret ct = getCollidingTurret(mp);
 		if(isColliding(mp, tGUI.getShape())){
 			//clicked GUI
-			System.out.println("GUI clicked");
+			
 			Button button = tGUI.click(mp);
 			if(button != null){
 				selectedTurret = tGUI.getTarget();
@@ -346,12 +387,14 @@ public class Play extends BasicGameState{
 	}
 	
 	public boolean isCollidingPath(Shape object){
-		if(	object.intersects(level.getEdgeA()) || 
-			object.intersects(level.getEdgeB()) || 
-			object.intersects(level.getPath())
-			){
-			return true;
+		if(object.intersects(level.getPath())){
+			return true;		
 		}else{
+			for(int i = 0; i < level.edges.size(); i++){
+				if(level.edges.get(i).intersects(object)){
+					return true;
+				}
+			}
 			return false;
 		}
 	}
@@ -365,7 +408,7 @@ public class Play extends BasicGameState{
 	}
 	
 	public void rightClick(Launch launch) {
-		System.out.println("Right click");
+		
 		switch(selectstatus){
 		case(NONE):
 			//right click with nothing on hand
@@ -389,4 +432,14 @@ public class Play extends BasicGameState{
 	}
 	
 	public static void pay(int val){credits += val;}
+
+	public void togglePause(){
+		paused = !paused;
+		Mouse.setGrabbed(!Mouse.isGrabbed());
+		if(paused){
+			pmenu = new PauseMenu();
+		}else{
+			pmenu = null;
+		}
+	}
 }

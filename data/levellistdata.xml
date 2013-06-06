@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
 <LevelList>
-	<Level path="data/levels/level_01.DATA" name="Level One" description="Hello"/>
-	<Level path="data/levels/level_01.DATA" name="Level Two" description="Goodbye"/>
+	<Level path="data/levels/level_01.xml" name="Level One" description="Hello"/>
 </LevelList>

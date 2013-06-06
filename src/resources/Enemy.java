@@ -29,11 +29,11 @@ public class Enemy {
 	
 	private HealthBar healthbar = new HealthBar(30, 4, 1, 1); //declared here to stop bugs
 		
-	private static ArrayList<Node> nodes;
+	private static ArrayList<PathPoint> PathPoints;
 	private Circle shape;
 	private boolean alive;
 	
-	public Enemy(ArrayList<Node> n, EnemyType etype){
+	public Enemy(ArrayList<PathPoint> n, EnemyType etype){
 		
 		ID = etype.ID;
 		name = etype.NAME;
@@ -50,10 +50,10 @@ public class Enemy {
 		alive = true;
 		healthbar = new HealthBar(30,2, health, shield);
 		shape = new Circle(x,y,radius);
-		nodes = n;
-		x = nodes.get(0).x;
-		y = nodes.get(0).y;
-		totalsegments = nodes.size()-2; //may cause issues (-2 is fine)
+		PathPoints = n;
+		x = PathPoints.get(0).x;
+		y = PathPoints.get(0).y;
+		totalsegments = PathPoints.size()-2; //may cause issues (-2 is fine)
 		
 	}
 	
@@ -82,8 +82,8 @@ public class Enemy {
 				}
 			}else{
 				currentdistanceonsegment += speed;
-				x = (float) (nodes.get(currentsegment).x + currentdistanceonsegment*Math.cos(segmentangle)); //x coordinate
-				y = (float) (nodes.get(currentsegment).y + currentdistanceonsegment*Math.sin(segmentangle)); //y coordinate
+				x = (float) (PathPoints.get(currentsegment).x + currentdistanceonsegment*Math.cos(segmentangle)); //x coordinate
+				y = (float) (PathPoints.get(currentsegment).y + currentdistanceonsegment*Math.sin(segmentangle)); //y coordinate
 			}
 		
 			shape = new Circle(x,y,radius);
@@ -94,8 +94,8 @@ public class Enemy {
 	private void newSegment(){
 		currentsegment++;
 		currentdistanceonsegment = 0;
-		Node p1 = nodes.get(currentsegment);
-		Node p2 = nodes.get(currentsegment+1);
+		PathPoint p1 = PathPoints.get(currentsegment);
+		PathPoint p2 = PathPoints.get(currentsegment+1);
 		
 		Line segmentline = new Line(p1.x, p1.y,p2.x,p2.y);
 		currentsegmentlength = segmentline.length();

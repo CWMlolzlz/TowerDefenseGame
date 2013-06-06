@@ -39,7 +39,6 @@ public class Spawner {
 	
 	public EnemyType doSpawn(){
 		if(tick%interval == 0 && enabled && canSpawn){
-			System.out.println(tick);
 			numSpawned++;
 			return enemytype;
 		}else{

@@ -36,7 +36,7 @@ public class LevelListData{
 			}
 				
 		}catch(Exception e) {
-			System.out.println("Uh oh");
+			e.printStackTrace();
 		}
 	}
 	

@@ -82,7 +82,7 @@ public class Bullet{
 	public boolean isAlive(){return alive;}
 
 	public void hit(Enemy e) {
-		if(decay > 0.2f){
+		if(decay > 0.4f){
 			
 			e.damage(DAMAGE, graphic.contains("Beam"));
 		}else if(decay <= 0){

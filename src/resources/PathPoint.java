@@ -2,9 +2,9 @@ package resources;
 
 import java.util.ArrayList;
 
-public class Node{
+public class PathPoint{
 	public float x,y;
-	public Node(float newx, float newy){
+	public PathPoint(float newx, float newy){
 		x = newx;
 		y = newy;
 	}	

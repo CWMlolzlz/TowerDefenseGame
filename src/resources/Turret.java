@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Shape;
 
 import resources.data.TurretData;
 import resources.types.BulletType;
@@ -36,6 +37,8 @@ public class Turret {
 	private int value = 100;
 	private boolean active;
 	
+	private int tick = 0;
+	
 	private int ID = 0;
 	
 	public Turret(){
@@ -54,7 +57,7 @@ public class Turret {
 		bRateOfFire = data.bRateOfFire;
 		range = bRange; //make return statement range+bRange
 		damage = bDamage; //keep base and offest independant;
-		rateoffire = bRateOfFire;// blah blah blah
+		rateoffire = bRateOfFire; // blah blah blah
 		
 		value = (int) (data.COST*.8);
 		
@@ -74,6 +77,10 @@ public class Turret {
 		updateSpecs();
 	}
 	
+	public void update(){
+		tick++;
+	}
+	
 	public void updatePlacement(float newx, float newy){
 		x = newx;
 		y = newy;
@@ -82,30 +89,38 @@ public class Turret {
 	}	
 
 	public void fire(){
-		Random generator = new Random();
-		ArrayList<Enemy> enemies = Level.getEnemies();
-		Enemy enemy = getNearestEnemy(enemies);
-		if(enemy != null){
-			float ex = enemy.x;
-			float ey = enemy.y;
-			float dx = ex - x;
-			float dy = ey - y;
-			int ymult = -1;
-			if(ey > y){ymult = 1;}
+		
+		if(tick >= 60){
+			tick -= 60;
 			
-			float random = generator.nextFloat();
-			float distance = (float) Math.sqrt((dx*dx) + (dy*dy));
-			float angle = (float) (ymult*(Math.acos(dx/distance)) + Math.PI) + ((2*random)-1)*bullet.ACCURACY;
+			Random generator = new Random();
+			ArrayList<Enemy> enemies = Level.getEnemies();
+			Enemy enemy = getNearestEnemy(enemies);
+			if(enemy != null){
+				float ex = enemy.x;
+				float ey = enemy.y;
+				float dx = ex - x;
+				float dy = ey - y;
+				int ymult = -1;
+				if(ey > y){ymult = 1;}
 			
-			float even = 0;
-			if(numofBullets%2 == 0){
-				even = 0.5f;
-			}
+				float random = generator.nextFloat();
+				float distance = (float) Math.sqrt((dx*dx) + (dy*dy));
+				float angle = (float) (ymult*(Math.acos(dx/distance)) + Math.PI) + ((2*random)-1)*bullet.ACCURACY;
 			
-			for(int j = 0; j< numofBullets; j++){
-				newBullet(angle + (j - numofBullets/2 + even)*splitshot);
+				float even = 0;
+				if(numofBullets%2 == 0){
+					even = 0.5f;
+				}
+			
+				for(int j = 0; j< numofBullets; j++){
+					newBullet(angle + (j - numofBullets/2 + even)*splitshot);
+				}
 			}
 		}
+		
+		tick+=rateoffire;
+		
 		
 	}
 	

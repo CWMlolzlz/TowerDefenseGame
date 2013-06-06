@@ -35,11 +35,6 @@ public class MainMenu extends BasicGameState{
 	public static LevelListData levellistdata = new LevelListData();
 	public ArrayList<Menu> menus = new ArrayList<Menu>();
 	
-	public MainMenu(){
-		
-	}
-	
-	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
@@ -47,9 +42,6 @@ public class MainMenu extends BasicGameState{
 		
 		menus.add(new Top(0,0));
 		levellistdata.loadLevelData();
-		
-		//play = new MenuButton(new Image("play_button.png"), 100, 100, Launch.PLAY);
-		
 	}
 
 	@Override
@@ -57,7 +49,6 @@ public class MainMenu extends BasicGameState{
 			throws SlickException {
 		for(int i = 0; i < menus.size(); i++){
 			menus.get(i).draw(g);
-			menus.get(i).update(); //naughty naughty me
 		}
 				
 		g.setColor(Color.white);
@@ -86,10 +77,9 @@ public class MainMenu extends BasicGameState{
 		for(int i = 0; i < menus.size(); i++){
 			Menu m = menus.get(i);
 			if(m.outline.contains(mousepoint)){
-				MenuButton b = m.getClickedButton();
+				MenuButton b = m.getClickedButton(mousepoint);
 				if(b != null){
 					if(b instanceof LevelSelectButton){
-						System.out.println(b.levelpath);
 						Launch.playLevel(b.levelpath);
 					}else{
 						checkEvent(b.getEvent());
@@ -101,7 +91,6 @@ public class MainMenu extends BasicGameState{
 	}
 
 	private void checkEvent(int event) {
-		System.out.println(event);
 		switch(event){
 			//top
 			case(QUIT):Launch.quit();break;

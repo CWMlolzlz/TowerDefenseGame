@@ -12,18 +12,20 @@ public class BulletType{
 	public float ACCURACY;
 	public Color COLOR;
 	
-	public BulletType(String[] line){
-		ID = Integer.parseInt(line[0]);
-		GRAPHIC = line[1]; //GRAPHIC can be replaced with ID, may keep GRAPHIC for modding
-		String[] colorline = line[2].split("-");
+	public BulletType(int id, String gName, String color, int speed, float accuracy){
+		ID = id;
+		GRAPHIC = gName; //GRAPHIC can be replaced with ID, may keep GRAPHIC for modding
+		String[] colorline = color.split("-");
 		
 		int r = Integer.parseInt(colorline[0]);
 		int g = Integer.parseInt(colorline[1]);
 		int b = Integer.parseInt(colorline[2]);
 		COLOR = new Color(r,g,b);
 		
-		SPEED = Integer.parseInt(line[3]);
-		ACCURACY = Float.parseFloat(line[4]);
+		
+		SPEED = speed;
+		ACCURACY = accuracy;
+		
 		switch(GRAPHIC){
 		case("Line"):
 			SHAPE = new Line(0,0,0,20);
@@ -36,4 +38,6 @@ public class BulletType{
 			break;
 		}
 	}
+
+	
 }
