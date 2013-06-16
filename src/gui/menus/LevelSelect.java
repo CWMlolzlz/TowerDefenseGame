@@ -1,16 +1,13 @@
 package gui.menus;
 
-import java.util.ArrayList;
+import game.MainMenu;
 
-import org.newdawn.slick.Graphics;
+import java.util.ArrayList;
 
 import resources.data.LevelInformation;
 
-import game.MainMenu;
-
 public class LevelSelect extends Menu{
 
-	//private ArrayList<LevelSelectButton> buttons = new ArrayList<LevelSelectButton>();
 	private ArrayList<LevelInformation> levelinfo = MainMenu.levellistdata.levelinfo;
 	
 	
@@ -21,17 +18,7 @@ public class LevelSelect extends Menu{
 			String text = linfo.NAME;
 			String description = linfo.DESCRIPTION;
 			String path = linfo.PATH;
-			addButton(new LevelSelectButton(text, path, x + 20, +((i+1)*50)));
+			addButton(new LevelSelectButton(text, path, 20, +((i+1)*50)));
 		}	
-	}
-	
-	public void draw(Graphics g){
-		g.draw(outline);
-		for(int j = 0; j < buttons.size(); j++){
-			MenuButton button = buttons.get(j);
-			g.drawString(button.text, button.xpos, button.ypos);
-			g.draw(button.shape);
-		}
-	}
-	
+	}	
 }

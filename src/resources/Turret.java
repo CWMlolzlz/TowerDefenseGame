@@ -5,8 +5,8 @@ import game.Play;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Shape;
 
 import resources.data.TurretData;
 import resources.types.BulletType;
@@ -14,32 +14,32 @@ import resources.types.TurretType;
 
 public class Turret {
 
-	private static final TurretData tdata = Play.TDATA;
-	private static final float splitshot = 0.2f;
+	protected static final TurretData tdata = Play.TDATA;
+	protected static final float splitshot = 0.2f;
 	
 	public boolean placed;
 	public boolean valid;
-	private float x, y, radius = 12;
-	private Circle area;
-	private Circle rangecircle;
+	public float x, y, radius = 12;
+	protected Circle area;
+	protected Circle rangecircle;
 	
-	private int bDamage, bRange;
-	private float bRateOfFire;
+	protected int bDamage, bRange;
+	protected float bRateOfFire;
 	
-	private int damage, range;
-	private float rateoffire;
+	protected int damage, range;
+	protected float rateoffire;
+	protected Color color;
+	protected int numofBullets;
 	
-	private int numofBullets;
+	protected int bullettypeID;
+	protected BulletType bullet;
 	
-	private int bullettypeID;
-	private BulletType bullet;
+	protected int value = 100;
+	protected boolean active;
 	
-	private int value = 100;
-	private boolean active;
+	protected int tick = 0;
 	
-	private int tick = 0;
-	
-	private int ID = 0;
+	protected int ID = 0;
 	
 	public Turret(){
 		placed = false;
@@ -49,6 +49,8 @@ public class Turret {
 		updateSpecs();
 	}
 
+	
+	
 	private void updateSpecs() {
 		TurretType data = tdata.getTurretType(ID);
 		numofBullets = data.numofBULLETS;
@@ -58,7 +60,7 @@ public class Turret {
 		range = bRange; //make return statement range+bRange
 		damage = bDamage; //keep base and offest independant;
 		rateoffire = bRateOfFire; // blah blah blah
-		
+		color = data.COLOR;
 		value = (int) (data.COST*.8);
 		
 		bullettypeID = data.BULLETTYPE;
@@ -94,7 +96,7 @@ public class Turret {
 			tick -= 60;
 			
 			Random generator = new Random();
-			ArrayList<Enemy> enemies = Level.getEnemies();
+			ArrayList<Enemy> enemies = Play.enemies;
 			Enemy enemy = getNearestEnemy(enemies);
 			if(enemy != null){
 				float ex = enemy.x;
@@ -151,8 +153,8 @@ public class Turret {
 		}
 	}
 
-	private void newBullet(float theta){
-		Level.bullets.add(new Bullet(bullet, damage, theta,x,y));
+	protected void newBullet(float theta){
+		Play.bullets.add(new Bullet(bullet, damage, theta,x,y));
 	}
 
 	public int getID(){return ID;}
@@ -163,5 +165,6 @@ public class Turret {
 	public float getY() {return y;}	
 	public float getRateOfFire(){return rateoffire;}
 	public boolean isActive(){return active;}
+	public Color getColor(){return color;}
 		
 }

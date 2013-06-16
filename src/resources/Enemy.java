@@ -1,8 +1,10 @@
 package resources;
 
 import game.Play;
+import gui.LevelGUI;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Circle;
@@ -19,7 +21,9 @@ public class Enemy {
 	private float starthealth, health, shield, speed, regen;
 	private int ID,reward,cost;
 	
-	private int radius = 10;
+	private float xoff, yoff;
+	
+	protected int radius;
 	public float x, y;
 	public int currentsegment = -1;
 	public float currentdistanceonsegment = 0;
@@ -35,6 +39,37 @@ public class Enemy {
 	
 	public Enemy(ArrayList<PathPoint> n, EnemyType etype){
 		
+		Random r = new Random();
+		
+		xoff = (r.nextFloat()-.5f)*10;
+		yoff = (r.nextFloat()-.5f)*10;
+		
+		float m = (float) Math.pow(1.08f,Play.currentWave-1);
+		
+		ID = etype.ID;
+		name = etype.NAME;
+		
+		starthealth = m*etype.HEALTH;
+		health = m*starthealth;
+		radius = etype.SIZE;
+		shield = m*etype.SHIELD;
+		speed = etype.SPEED;
+		regen =	etype.REGEN;
+		
+		reward = etype.REWARD;
+		cost = etype.COST;
+		
+		alive = true;
+		healthbar = new HealthBar(3*radius,2, health, shield);
+		shape = new Circle(x+xoff,y+yoff,radius);
+		PathPoints = n;
+		x = PathPoints.get(0).x;
+		y = PathPoints.get(0).y;
+		totalsegments = PathPoints.size()-2; //may cause issues (-2 is fine)
+		
+	}
+	
+	public Enemy(float f, float g, EnemyType etype) {
 		ID = etype.ID;
 		name = etype.NAME;
 		
@@ -49,23 +84,20 @@ public class Enemy {
 		
 		alive = true;
 		healthbar = new HealthBar(30,2, health, shield);
-		shape = new Circle(x,y,radius);
-		PathPoints = n;
-		x = PathPoints.get(0).x;
-		y = PathPoints.get(0).y;
-		totalsegments = PathPoints.size()-2; //may cause issues (-2 is fine)
-		
+		shape = new Circle(x+xoff,y+yoff,radius);
+		x = f;
+		y = g;
 	}
-	
+
 	public Shape getShape(){return shape;}
 	public boolean isAlive(){return alive;}
 	
 	public void step(){
 		
 		if(health <= 0){
-			new Explosion(x,y);
+			new Explosion(x+xoff,y+yoff);
 			Play.pay(reward);
-			Level.removeEnemy(this);
+			Play.enemyKilled(this);
 		}else{
 			if(health < starthealth){
 				health += regen;
@@ -73,21 +105,25 @@ public class Enemy {
 					health = starthealth;
 				}
 			}
+			
 			if(currentdistanceonsegment >= currentsegmentlength){
 				if(currentsegment == totalsegments){
-					//destroy
-					Level.removeEnemy(this);
+					Play.baseHealth -= radius;
+					LevelGUI.updateBaseHealthBar();
+					Play.enemyReachedEnd(this);
 				}else{
 					newSegment();
 				}
 			}else{
 				currentdistanceonsegment += speed;
+			}
 				x = (float) (PathPoints.get(currentsegment).x + currentdistanceonsegment*Math.cos(segmentangle)); //x coordinate
 				y = (float) (PathPoints.get(currentsegment).y + currentdistanceonsegment*Math.sin(segmentangle)); //y coordinate
-			}
-		
+			
+			x += xoff;
+			y += yoff;
 			shape = new Circle(x,y,radius);
-			healthbar.update(x - 15, y-15, health, shield);
+			healthbar.update(x - 1.5f*radius, y - (radius + 5), health, shield);
 		}
 	}
 	
@@ -148,8 +184,8 @@ class HealthBar{
 	}
 	
 	public void update(float x, float y, float health, float shield){
-		int r = (int) (511- 2*(health / startHealth*255));
-		int g = (int) (2*health / startHealth*255);
+		int r = (int) (512- (health / startHealth*512));
+		int g = (int) (health / startHealth*512);
 		int b = 0;
 		color = new Color(r,g,b);
 		shape = new Rectangle(x, y, (health/startHealth)*width, height);

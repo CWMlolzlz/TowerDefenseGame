@@ -1,6 +1,7 @@
 package resources;
 
 import game.Play;
+import resources.data.SpawnData;
 import resources.types.EnemyType;
 
 public class Spawner {

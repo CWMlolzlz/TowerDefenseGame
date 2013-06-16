@@ -10,7 +10,6 @@ import org.newdawn.slick.geom.Shape;
 
 import resources.data.TurretData;
 import resources.types.TurretType;
-import resources.types.UpgradeBranch;
 
 public class TurretGUI {
 
@@ -101,11 +100,7 @@ public class TurretGUI {
 		}
 		return null;		
 	}
-	
-	public void mouseOver(Shape mp){
 		
-	}
-	
 	public void setTurretData(TurretData td){
 		tdata = td;
 	}

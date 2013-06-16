@@ -24,10 +24,11 @@ import resources.data.LevelListData;
 
 public class MainMenu extends BasicGameState{
 
-	public static final int QUIT = 0, PLAY = 1, OPTIONS = 2;
+	public static final int QUIT = 0, PLAY = 1, OPTIONS = 2,MODDING_TOOLS = 3;
 	public static final int NEW_LEVEL = 10, RESUME = 11;
 	public static final int VIDEO = 20, AUDIO = 21;
-	
+	public static final int MOD_TURRETS = 30, MOD_ENEMY = 31, MOD_LEVEL = 32;
+		
 	public static int width;
 	public static int height;
 	public static int my,mx;
@@ -39,9 +40,9 @@ public class MainMenu extends BasicGameState{
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
 		width = gc.getWidth();
-		
 		menus.add(new Top(0,0));
 		levellistdata.loadLevelData();
+		
 	}
 
 	@Override
@@ -63,7 +64,9 @@ public class MainMenu extends BasicGameState{
 		mx = in.getMouseX();
 		my = gc.getHeight() - Mouse.getY();
 		mousepoint = new Point(mx,my);
-		
+		for(int i = 0; i < menus.size(); i++){
+			menus.get(i).update();
+		}
 		
 	}
 
@@ -85,6 +88,7 @@ public class MainMenu extends BasicGameState{
 						checkEvent(b.getEvent());
 					}
 				}
+				break;
 			}
 		}
 		
@@ -93,17 +97,25 @@ public class MainMenu extends BasicGameState{
 	private void checkEvent(int event) {
 		switch(event){
 			//top
-			case(QUIT):Launch.quit();break;
+			case(QUIT):
+				Launch.quit();
+				break;
 			case(PLAY):
-				removeMenus(1);
+				removeMenus(PLAY);
 				menus.add(new Levels(menus.size()*200,0));
 				break;
 			case(OPTIONS):
-				removeMenus(1);
+				removeMenus(OPTIONS);
 				menus.add(new Options(menus.size()*200,0));
 				break;
+			case(MODDING_TOOLS):
+				removeMenus(MODDING_TOOLS);
+				Launch.changeState(Launch.MODDING);
+				break;
+			case(MOD_TURRETS):
+				break;
 			case(NEW_LEVEL):
-				removeMenus(2);
+				removeMenus(NEW_LEVEL);
 				menus.add(new LevelSelect(menus.size()*200,0));
 				break;
 			case(RESUME):
@@ -115,7 +127,8 @@ public class MainMenu extends BasicGameState{
 
 	private void removeMenus(int val) {
 		ArrayList<Menu> newmenus = new ArrayList<Menu>();
-		for(int i = 0; i < val; i++){
+		int num = (""+val).length();
+		for(int i = 0; i < num; i++){
 			newmenus.add(menus.get(i));
 			
 		}

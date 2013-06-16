@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <EnemyType>
-	<Enemy id="0" name="Weaklnig" health="10" shield="0" speed="1" regeneration="0" reward="10" cost="5"/>
-	<Enemy id="1" name="Brute" health="150" shield="0" speed="0.5" regeneration="0" reward="50" cost="25"/>
-	<Enemy id="2" name="Minion" health="20" shield="0" speed="2" regeneration="0.01" reward="5" cost="2"/>
-	<Enemy id="3" name="Hunker" health="50" shield="600" speed="0.4" regeneration="0" reward="100" cost="50"/>
+	<Enemy id="0" name="Weakling" size="8" health="10" shield="0" speed="1" regeneration="0" reward="3" cost="5"/>
+	<Enemy id="1" name="Brute" size="10" health="150" shield="0" speed="0.5" regeneration="0" reward="10" cost="25"/>
+	<Enemy id="2" name="Minion" size="5" health="20" shield="0" speed="1.8" regeneration="0.01" reward="5" cost="2"/>
+	<Enemy id="3" name="Hunker" size="12" health="50" shield="600" speed="0.4" regeneration="0" reward="30" cost="50"/>
+	<Enemy id="4" name="Spiddles" size="2" health="2" shield="0" speed="1" regeneration="0" reward="1" cost="1"/>
 </EnemyType>

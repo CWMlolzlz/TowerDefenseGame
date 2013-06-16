@@ -13,8 +13,8 @@ public class MenuButton{
 	private int BUTTONSTATE = NO_MOUSE;
 	private int EVENT;
 	
-	private static final int height = 30;
-	private static final int width = 160;
+	public static final int height = 30;
+	public static final int width = 160;
 	
 	private Image[] subimgs = new Image[3];
 	public String text;

@@ -55,8 +55,8 @@
 	</Wave>
 
 	<Wave>
-		<Spawn enemyID="0" quantity="20" freq="60" delay="120"/>
-		<Spawn enemyID="1" quantity="5" freq="90" delay="0"/>
+		<Spawn enemyID="0" quantity="40" freq="30" delay="360"/>
+		<Spawn enemyID="1" quantity="5" freq="120" delay="0"/>
 	</Wave>
 
 	<Wave>
@@ -67,5 +67,16 @@
 	<Wave>
 		<Spawn enemyID="3" quantity="3" freq="360" delay="0"/>
 	</Wave>
+
+	<Wave>
+		<Spawn enemyID="4" quantity="200" freq="10" delay="0"/>
+	</Wave>
+
+	<Wave>
+		<Spawn enemyID="0" quantity="20" freq="60" delay="0"/>
+		<Spawn enemyID="3" quantity="5" freq="320" delay="0"/>
+
+	</Wave>
+
 	</WaveData>
 </Level>

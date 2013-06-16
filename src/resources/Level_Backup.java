@@ -1,20 +1,22 @@
 package resources;
 
 import game.Play;
-import gui.ProgressBar;
+import gui.LevelGUI;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.particles.ConfigurableEmitter;
 import org.newdawn.slick.particles.ParticleIO;
 
 import resources.data.LevelData;
+import resources.data.SpawnData;
 
-public class Level {
+public class Level_Backup{
 	
 	private ConfigurableEmitter ce;
 	
@@ -31,39 +33,32 @@ public class Level {
 	
 		
 	public int maximumWaves;
-	public int currentWave = 1;
+	public static int currentWave = 1;
 	private int enemiesInWave;
 	public static int enemiesKilled;
-	public static ProgressBar pb;
+	public static LevelGUI LGUI;
 	private Wave wave;
 	
 	public static int delay = 0;
-	
-	public static ArrayList<Bullet> bullets = new ArrayList<Bullet>(); //optimise make static
-	private static ArrayList<Turret> turrets = new ArrayList<Turret>(); //optimise make static
-	private static ArrayList<PathPoint> PathPoints = new ArrayList<PathPoint>(); //optimise make static
-	private static ArrayList<Enemy> enemies = new ArrayList<Enemy>(); //optimise make static
-	public static ArrayList<Shape> edges = new ArrayList<Shape>();
 		
 	public void loadLevel(String levelpath){
-		enemies.clear();
-		PathPoints.clear();
-		turrets.clear();
-		bullets.clear();
 		leveldata = new LevelData(levelpath);
-		pb = new ProgressBar(breakTimeLimit);
+		
 		waves = leveldata.getWaveData();
 		maximumWaves = waves.size();
 		
+		Play.enemies.clear();
+		Play.turrets.clear();
+				
 		//create Path
-		PathPoints = leveldata.getPath();
-		for(int i = 0; i < PathPoints.size(); i++){
-			PathPoint PathPoint = PathPoints.get(i);
+		Play.pathPoints = leveldata.getPath();
+		for(int i = 0; i < Play.pathPoints.size(); i++){
+			PathPoint PathPoint = Play.pathPoints.get(i);
 			path.addPoint(PathPoint.x, PathPoint.y);
 		}
 		path.setClosed(false);
 		
-		edges = leveldata.getEdges();
+		Play.edges = leveldata.getEdges();
 		
 		try{
 			ce = ParticleIO.loadEmitter(new File("data/particles/glow.xml"));
@@ -73,6 +68,9 @@ public class Level {
 			e.printStackTrace();
 		}
 		
+		LGUI = new LevelGUI(Play.gamecont.getWidth(), Play.gamecont.getHeight());
+		LGUI.setProgressBar(breakTimeLimit);
+		LGUI.setLevelProgressBar(maximumWaves);
 		
 	}
 	
@@ -83,7 +81,7 @@ public class Level {
 			waveStep();
 		}else if(gamestage == BREAK){
 			breaktick++;
-			pb.update(1);
+			LGUI.updateWaveProgressBar(false);
 			if(breaktick == breakTimeLimit){
 				breaktick = 0;
 				startWave();
@@ -91,8 +89,8 @@ public class Level {
 		}
 		
 		//make turrets shoot
-		for(int i = 0; i < turrets.size(); i++){
-			Turret turret = turrets.get(i);
+		for(int i = 0; i < Play.turrets.size(); i++){
+			Turret turret = Play.turrets.get(i);
 			
 			if(turret.placed == true){
 				turret.fire();
@@ -101,20 +99,22 @@ public class Level {
 		//AI step
 		AIStep();
 		
+		LGUI.update();
+		
 		delay++;
 	}
 	
 	private void AIStep(){
-		for(int i = 0; i < enemies.size(); i++){
-			Enemy e = enemies.get(i);
+		for(int i = 0; i < Play.enemies.size(); i++){
+			Enemy e = Play.enemies.get(i);
 			e.step();
 		}
 		
-		for(int j = 0; j < bullets.size(); j++){
-			Bullet b = bullets.get(j);
+		for(int j = 0; j < Play.bullets.size(); j++){
+			Bullet b = Play.bullets.get(j);
 			b.step();
-			for(int k = 0; k < enemies.size(); k++){
-				Enemy e = enemies.get(k);
+			for(int k = 0; k < Play.enemies.size(); k++){
+				Enemy e = Play.enemies.get(k);
 				Shape s = b.getShape();
 				if(e.getShape().intersects(s)){
 					b.hit(e);
@@ -134,7 +134,7 @@ public class Level {
 			enemiesInWave += sd.QUANTITY;
 			spawners.add(new Spawner(sd));
 		}
-		pb = new ProgressBar(enemiesInWave);
+		LGUI.setProgressBar(enemiesInWave);
 	}
 	
 	private void waveStep(){
@@ -142,23 +142,23 @@ public class Level {
 		//credit interest
 		creditInterest();
 		if(enemiesKilled == enemiesInWave){
+			
 			if(currentWave == maximumWaves){
-				//Play.enterState();
-				//completeLevel();
 				gamestage = COMPLETE;
-				
+				completeLevel();
 			}else{
-				pb = new ProgressBar(breakTimeLimit);
+				LGUI.setProgressBar(breakTimeLimit);
 				gamestage = BREAK;
-				currentWave++;
 			}
+			LGUI.updateLevelProgress();
+			currentWave++;
 		}else{
 			for(int i = 0; i < spawners.size(); i++){
 				Spawner s = spawners.get(i);
 				s.update();
 				if(s.isEnabled()){
 					if(s.doSpawn() != null){
-						enemies.add(new Enemy(PathPoints,s.enemytype));
+						Play.enemies.add(new Enemy(Play.pathPoints,s.enemytype));
 					}
 				}else{
 					spawners.remove(s);
@@ -175,25 +175,27 @@ public class Level {
 		Play.credits *= 1.0001f;
 	}
 
-	public void placeTurret(Turret turret) {
-		turrets.add(turret);
-		turret.place();
-	}
+	public static void enemyKilled(Enemy e){
+		Play.enemies.remove(e);
+		enemiesKilled++;
+		LGUI.updateWaveProgressBar(false);
+	}	
 	
-	public void sellTurret(Turret target) {
-		turrets.remove(target);
+	public static void enemyReachedEnd(Enemy e){
+		Play.enemies.remove(e);
+		LGUI.updateWaveProgressBar(true);
 	}
-	
-	public static void removeEnemy(Enemy e){enemies.remove(e);enemiesKilled++;pb.update(1);}	
-	public static void removeTurret(Turret t){turrets.remove(t);}
-	public static void removeBullet(Bullet b){bullets.remove(b);}
+	public static void removeTurret(Turret t){Play.turrets.remove(t);}
+	public static void removeBullet(Bullet b){Play.bullets.remove(b);}
 	
 	public Shape getPath(){return path;}
-	//public Shape getEdgeA(){return pathedgeA;}
-	//public Shape getEdgeB(){return pathedgeB;}
-	public static ArrayList<Enemy> getEnemies(){return enemies;}
-	public static ArrayList<Turret> getTurrets(){return turrets;}
-	public static ArrayList<Bullet> getBullets() {return bullets;}
+	public static ArrayList<Enemy> getEnemies(){return Play.enemies;}
+	public static ArrayList<Turret> getTurrets(){return Play.turrets;}
+	public static ArrayList<Bullet> getBullets() {return Play.bullets;}
+
+	public static void draw(Graphics g) {
+		LGUI.draw(g);
+	}
 
 	
 }

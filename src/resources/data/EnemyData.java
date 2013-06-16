@@ -1,9 +1,7 @@
 package resources.data;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -14,7 +12,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import resources.types.EnemyType;
-import resources.types.TurretType;
 
 public class EnemyData{
 
@@ -40,6 +37,7 @@ public class EnemyData{
 					Element eElement = (Element) contentsNode;
 					int id = Integer.parseInt(eElement.getAttribute("id"));
 					String name = eElement.getAttribute("name");
+					int size = Integer.parseInt(eElement.getAttribute("size"));
 					int health = Integer.parseInt(eElement.getAttribute("health"));
 					int shield = Integer.parseInt(eElement.getAttribute("shield"));
 					float speed = Float.parseFloat(eElement.getAttribute("speed"));
@@ -47,7 +45,7 @@ public class EnemyData{
 					int reward = Integer.parseInt(eElement.getAttribute("reward"));
 					int cost = Integer.parseInt(eElement.getAttribute("cost"));
 										
-					etypes.add(new EnemyType(id,name,health,shield,speed,regen,reward,cost));
+					etypes.add(new EnemyType(id,name,size,health,shield,speed,regen,reward,cost));
 					
 				}
 			}

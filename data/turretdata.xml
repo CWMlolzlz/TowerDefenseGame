@@ -1,12 +1,15 @@
 <?xml version="1.0"?>
 <Contents>
 <TurretData>
-	<Turret id="0" name="Basic" cost="100" bDamage="8" bRange="100" bRateOfFire="2" bullets="1" bulletType="0" color="255-255-255"/>
-	<Turret id="1" name="Power" cost="200" bDamage="12" bRange="120" bRateOfFire="3" bullets="1" bulletType="0" color="255-255-255"/>
-	<Turret id="2" name="Precision" cost="200" bDamage="1" bRange="200" bRateOfFire="1" bullets="1" bulletType="1" color="255-255-255"/>
-	<Turret id="3" name="RapidFire" cost="250" bDamage="3" bRange="100" bRateOfFire="10" bullets="1" bulletType="0" color="255-255-255"/>
-	<Turret id="4" name="Burst" cost="500" bDamage="5" bRange="120" bRateOfFire="6" bullets="1" bulletType="2" color="255-255-255"/>
-	<Turret id="5" name="Spread" cost="150" bDamage="6" bRange="100" bRateOfFire="2" bullets="3" bulletType="2" color="255-255-255"/>
+	<Turret id="0" name="Basic" cost="0" bDamage="8" bRange="100" bRateOfFire="2" bullets="1" bulletType="0" color="255-255-255"/>
+	<Turret id="1" name="Power" cost="50" bDamage="10" bRange="120" bRateOfFire="3" bullets="1" bulletType="0" color="255-200-100"/>
+
+	<Turret id="2" name="Precision" cost="120" bDamage="1" bRange="200" bRateOfFire="1" bullets="1" bulletType="1" color="100-100-255"/>
+
+	<Turret id="3" name="RapidFire" cost="100" bDamage="3" bRange="100" bRateOfFire="10" bullets="1" bulletType="0" color="255-100-100"/>
+	<Turret id="4" name="Burst" cost="500" bDamage="5" bRange="120" bRateOfFire="6" bullets="1" bulletType="2" color="255-100-100"/>
+
+	<Turret id="5" name="Spread" cost="80" bDamage="8" bRange="100" bRateOfFire="2" bullets="3" bulletType="2" color="100-255-100"/>
 </TurretData>
 
 <UpgradeBranches>

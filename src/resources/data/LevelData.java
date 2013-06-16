@@ -1,9 +1,7 @@
 package resources.data;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,7 +15,6 @@ import org.w3c.dom.NodeList;
 
 import resources.PathPoint;
 import resources.Wave;
-import resources.types.TurretType;
 
 public class LevelData{
 

@@ -24,9 +24,11 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 	public static final String gamename = "TowerDefense";
 	public static final int MENU = 0; 
 	public static final int PLAY = 1;
+	public static final int MODDING = 2;
 	
 	private static Play play = new Play();
 	private static MainMenu menu = new MainMenu();
+	private static Modding modding = new Modding();
 	
 	public static GameContainer gamecontainer;
 	private static StateBasedGame sbg;
@@ -35,13 +37,14 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 		super(gamename);
 		this.addState(menu);
 		this.addState(play);		
+		this.addState(modding);
 	}
 
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
 		
 		gamecontainer = gc;
-		
+		sbg = this;
 		
 		provider = new InputProvider(gc.getInput());
 		provider.addListener(this);
@@ -50,21 +53,11 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 		provider.bindCommand(new KeyControl(Input.KEY_ENTER), enter);
 		provider.bindCommand(new KeyControl(Input.KEY_ESCAPE), escape);
 		
-		this.getState(MENU).init(gc,this);
-		this.getState(PLAY).init(gc,this);
-		
 		this.enterState(MENU);
-		sbg = this;
+		
 	}
 	
-	public static void main(String[] args) throws SlickException{
-		AppGameContainer app = new AppGameContainer(new Launch(gamename));
-		app.setDisplayMode(800,600,false);
-		//app.setVSync(true);
-		app.setTargetFrameRate(60);
-		app.start();
-	}
-
+	
 	@Override
 	public void controlPressed(Command arg0) {
 		// TODO Auto-generated method stub
@@ -79,14 +72,12 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 				menu.leftClick(this);
 			}else if(isPlaying()){
 				play.leftClick(this);
+			}else if(isModding()){
+				modding.leftClick(this);
 			}
 		}else if(command == rightclick){
 			if(isPlaying()){
 				play.rightClick(this);
-			}
-		}else if(command == enter){
-			if(isPlaying()){
-				play.level.startWave();
 			}
 		}else if(command == escape){
 			if(isPlaying()){
@@ -98,13 +89,21 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 		
 	}
 	
+	
+
 	public static void quit(){gamecontainer.exit();}
 	
 	public static void changeState(int val){
 		sbg.enterState(val);
 	}
 	
-	
+	private boolean isModding() {
+		if(this.getCurrentState() == modding){
+			return true;
+		}else{
+			return false;
+		}
+	}
 
 	public boolean isPlaying(){
 		if(this.getCurrentState() == play){
@@ -118,4 +117,13 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 		play.loadLevel(levelpath);
 		changeState(PLAY);
 	}	
+	
+	public static void main(String[] args) throws SlickException{
+		AppGameContainer app = new AppGameContainer(new Launch(gamename));
+		app.setDisplayMode(800,600,false);
+		app.setVSync(true);
+		app.setTargetFrameRate(60);
+		app.start();
+	}
+
 }

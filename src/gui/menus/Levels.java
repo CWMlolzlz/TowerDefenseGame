@@ -7,8 +7,8 @@ public class Levels extends Menu{
 	public Levels(float x, float y){
 		super(x, y);
 			
-		addButton(new MenuButton("New Level",x + 20f,50,MainMenu.NEW_LEVEL));
-		addButton(new MenuButton("Resume",x + 20f,100,MainMenu.RESUME));
+		addButton(new MenuButton("New Level",20,50,MainMenu.NEW_LEVEL));
+		addButton(new MenuButton("Resume",20,100,MainMenu.RESUME));
 		
 	}
 }

@@ -1,5 +1,7 @@
 package resources;
 
+import game.Play;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Line;
@@ -36,7 +38,7 @@ public class Bullet{
 	
 	public void step(){
 		if(x < -10 || y < -10 || x > 1000 || y > 1000){
-			Level.removeBullet(this);
+			Play.removeBullet(this);
 		}else{
 			x -= speed*cos(angle);
 			y -= speed*sin(angle);
@@ -82,15 +84,15 @@ public class Bullet{
 	public boolean isAlive(){return alive;}
 
 	public void hit(Enemy e) {
-		if(decay > 0.4f){
+		if(decay > 0.5f){
 			
 			e.damage(DAMAGE, graphic.contains("Beam"));
 		}else if(decay <= 0){
-			Level.removeBullet(this);
+			Play.removeBullet(this);
 		}
 		
 		if(!graphic.contains("Beam")){
-			Level.removeBullet(this);
+			Play.removeBullet(this);
 		}
 		
 		
