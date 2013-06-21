@@ -44,17 +44,17 @@ public class Enemy {
 		xoff = (r.nextFloat()-.5f)*10;
 		yoff = (r.nextFloat()-.5f)*10;
 		
-		float m = (float) Math.pow(1.08f,Play.currentWave-1);
+		float m = (float) Math.pow(1.12f,Play.currentWave-1);
 		
 		ID = etype.ID;
 		name = etype.NAME;
 		
 		starthealth = m*etype.HEALTH;
-		health = m*starthealth;
+		health = starthealth;
 		radius = etype.SIZE;
 		shield = m*etype.SHIELD;
 		speed = etype.SPEED;
-		regen =	etype.REGEN;
+		regen =	m*etype.REGEN;
 		
 		reward = etype.REWARD;
 		cost = etype.COST;
@@ -96,6 +96,7 @@ public class Enemy {
 		
 		if(health <= 0){
 			new Explosion(x+xoff,y+yoff);
+			try {this.finalize();}catch(Throwable e){e.printStackTrace();}
 			Play.pay(reward);
 			Play.enemyKilled(this);
 		}else{
@@ -109,7 +110,7 @@ public class Enemy {
 			if(currentdistanceonsegment >= currentsegmentlength){
 				if(currentsegment == totalsegments){
 					Play.baseHealth -= radius;
-					LevelGUI.updateBaseHealthBar();
+					Play.LGUI.updateBaseHealthBar();
 					Play.enemyReachedEnd(this);
 				}else{
 					newSegment();

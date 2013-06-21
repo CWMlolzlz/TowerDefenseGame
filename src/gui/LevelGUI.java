@@ -1,12 +1,9 @@
 package gui;
 
-import java.awt.Font;
-
 import game.Play;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Circle;
 
 import resources.Fonts;
@@ -16,20 +13,20 @@ public class LevelGUI{
 	//Font font = new Font("Salaryman",Font.PLAIN,12);
 	//TrueTypeFont unifont = new TrueTypeFont(font, false);
 	
-	ProgressBar wavepbar;
-	LevelProgress lpbar;
-	static BaseHealthBar bhb;
+	public WaveProgress wavepbar;
+	public LevelProgress lpbar;
+	public BaseHealthBar bhb;
 	
 	float x1=55,y1=545;
-	float x2=115,y2=565;
+	float x2=110,y2=575;
 	
 	float wavepbarradius = 40;
 	float lpbarradius = 50;
-	float bhbradius = 15;
+	float bhbradius = 18;
 	
 	
 	Meter credits;
-	static Meter nextTurretCost;
+	Meter nextTurretCost;
 	
 	public LevelGUI(float width, float height){
 		credits = new Meter(x1, y1-6, 30, new Color(200,100,0), Fonts.salaryman_bold);
@@ -68,36 +65,28 @@ public class LevelGUI{
 		g.draw(new Circle(x1,y1,lpbarradius));
 		g.draw(new Circle(x1,y1,25));
 		
-		
-		
-		
-		
 		//text
 		credits.draw(g);
 		nextTurretCost.draw(g);
 	}
 	
-	public void updateWaveProgressBar(boolean bad){
-		wavepbar.update(bad);
-	}
-	
 	public void setProgressBar(int val){
-		wavepbar = new ProgressBar(x1,y1,val,wavepbarradius);
+		wavepbar = new WaveProgress(x1,y1,val,wavepbarradius);
 	}
 	
 	public void updateLevelProgress() {
-		lpbar.update(false);
+		lpbar.update();
 	}
 	
 	public void setLevelProgressBar(int val){
 		lpbar = new LevelProgress(x1,y1,val,lpbarradius);
 	}
 	
-	public static void updateBaseHealthBar(){
+	public void updateBaseHealthBar(){
 		bhb.update();
 	}
 	
-	public static void updateTurretCostText(){
+	public void updateTurretCostText(){
 		nextTurretCost.setValue(Play.getNextTurretCost());
 	}
 }

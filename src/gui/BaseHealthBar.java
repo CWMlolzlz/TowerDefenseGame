@@ -1,19 +1,13 @@
 package gui;
 
-import java.awt.Font;
+import game.Play;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.geom.Circle;
-
-import game.Play;
 
 public class BaseHealthBar extends ProgressBar{
 
-	
-	
 	private float start = Play.baseHealth;
 	
 	public BaseHealthBar(float newx, float newy,float r) {

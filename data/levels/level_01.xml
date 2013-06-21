@@ -46,36 +46,54 @@
 	</PathPoints>
 
 	<WaveData>
-	<Wave>
+
+	<Wave save="false">
 		<Spawn enemyID="0" quantity="10" freq="60" delay="0"/>
 	</Wave>
 
-	<Wave>
+	<Wave save="false">
 		<Spawn enemyID="0" quantity="20" freq="45" delay="0"/>
 	</Wave>
 
-	<Wave>
+	<Wave save="false">
 		<Spawn enemyID="0" quantity="40" freq="30" delay="360"/>
 		<Spawn enemyID="1" quantity="5" freq="120" delay="0"/>
 	</Wave>
 
-	<Wave>
+	<Wave save="true">
 		<Spawn enemyID="1" quantity="10" freq="120" delay="0"/>
 		<Spawn enemyID="2" quantity="50" freq="20" delay="0"/>
 	</Wave>
 	
-	<Wave>
+	<Wave save="false">
 		<Spawn enemyID="3" quantity="3" freq="360" delay="0"/>
 	</Wave>
 
-	<Wave>
+	<Wave save="false">
 		<Spawn enemyID="4" quantity="200" freq="10" delay="0"/>
 	</Wave>
 
-	<Wave>
+	<Wave save="false">
 		<Spawn enemyID="0" quantity="20" freq="60" delay="0"/>
 		<Spawn enemyID="3" quantity="5" freq="320" delay="0"/>
+	</Wave>
 
+	<Wave save="true">
+		<Spawn enemyID="0" quantity="20" freq="60" delay="0"/>
+		<Spawn enemyID="1" quantity="10" freq="60" delay="20"/>
+		<Spawn enemyID="4" quantity="20" freq="60" delay="40"/>
+	</Wave>
+
+	<Wave save="false">
+		<Spawn enemyID="2" quantity="30" freq="60" delay="0"/>
+		<Spawn enemyID="3" quantity="10" freq="180" delay="0"/>
+	</Wave>
+
+	<Wave save="false">
+		<Spawn enemyID="0" quantity="20" freq="30" delay="0"/>
+		<Spawn enemyID="1" quantity="10" freq="60" delay="600"/>
+		<Spawn enemyID="4" quantity="30" freq="15" delay="1200"/>
+		<Spawn enemyID="5" quantity="2" freq="300" delay="1350"/>
 	</Wave>
 
 	</WaveData>

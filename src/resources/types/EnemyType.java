@@ -20,7 +20,7 @@ public class EnemyType{
 		HEALTH = health;
 		SHIELD = shield;
 		SPEED = speed;
-		REGEN = regen;
+		REGEN = regen/60;
 		
 		REWARD = reward;
 		COST = cost;

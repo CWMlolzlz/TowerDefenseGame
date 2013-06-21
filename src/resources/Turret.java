@@ -34,18 +34,18 @@ public class Turret {
 	protected int bullettypeID;
 	protected BulletType bullet;
 	
-	protected int value = 100;
+	public int value;
 	protected boolean active;
 	
 	protected int tick = 0;
 	
 	protected int ID = 0;
 	
-	public Turret(){
+	public Turret(int val){
 		placed = false;
 		valid = false;
 		area = new Circle(x,y,radius);
-		
+		value = val;
 		updateSpecs();
 	}
 
@@ -61,7 +61,8 @@ public class Turret {
 		damage = bDamage; //keep base and offest independant;
 		rateoffire = bRateOfFire; // blah blah blah
 		color = data.COLOR;
-		value = (int) (data.COST*.8);
+		
+		
 		
 		bullettypeID = data.BULLETTYPE;
 		bullet = tdata.getBulletType(bullettypeID);
@@ -78,11 +79,7 @@ public class Turret {
 		ID = IDval;
 		updateSpecs();
 	}
-	
-	public void update(){
-		tick++;
-	}
-	
+		
 	public void updatePlacement(float newx, float newy){
 		x = newx;
 		y = newy;

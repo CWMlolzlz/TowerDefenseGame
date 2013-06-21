@@ -21,10 +21,7 @@ public class LevelData{
 	private String levelpath;
 	
 	private ArrayList<PathPoint> path = new ArrayList<PathPoint>();
-	//private ArrayList<Node> edgeA = new ArrayList<Node>();
-	//private ArrayList<Node> edgeB = new ArrayList<Node>();
 	private ArrayList<Shape> edges = new ArrayList<Shape>();
-	
 	private ArrayList<Wave> waves = new ArrayList<Wave>();
 	
 	public LevelData(String p){
@@ -55,7 +52,6 @@ public class LevelData{
 					for(int j = 0; j < points.getLength(); j++){
 						Node point = points.item(j);
 						if(point.getNodeType() == Node.ELEMENT_NODE){
-							//System.out.println(point.getNodeName() + ", " + point.)
 							Element e = (Element) point;
 							float xcoord = Float.parseFloat(e.getAttribute("x"));
 							float ycoord = Float.parseFloat(e.getAttribute("y"));
@@ -76,25 +72,25 @@ public class LevelData{
 			for(int i = 0; i < waveNodes.getLength(); i++){
 				Node waveNode = waveNodes.item(i); //<Wave> node
 				if(waveNode.getNodeType() == Node.ELEMENT_NODE){
-					NodeList points = waveNode.getChildNodes(); //<Spawn> nodes
-					Wave newWave = new Wave();
-					for(int j = 0; j < points.getLength(); j++){
-						Node point = points.item(j); //<Spawn> node
-						if(point.getNodeType() == Node.ELEMENT_NODE){
-							Element e = (Element) point;
-							int eID = Integer.parseInt(e.getAttribute("enemyID"));
-							int quantity = Integer.parseInt(e.getAttribute("quantity"));
-							int freq = Integer.parseInt(e.getAttribute("freq"));
-							int delay = Integer.parseInt(e.getAttribute("delay"));
-							newWave.addSpawnData(eID, quantity, freq,delay);
-						}					
+					String save = ((Element)waveNode).getAttribute("save");
+					Wave newWave = new Wave(save.contains("true"));
+					if(waveNode.getNodeType() == Node.ELEMENT_NODE){
+						NodeList points = waveNode.getChildNodes(); //<Spawn> nodes
+						for(int j = 0; j < points.getLength(); j++){
+							Node point = points.item(j); //<Spawn> node
+							if(point.getNodeType() == Node.ELEMENT_NODE){
+								Element e = (Element) point;
+								int eID = Integer.parseInt(e.getAttribute("enemyID"));
+								int quantity = Integer.parseInt(e.getAttribute("quantity"));
+								int freq = Integer.parseInt(e.getAttribute("freq"));
+								int delay = Integer.parseInt(e.getAttribute("delay"));
+								newWave.addSpawnData(eID, quantity, freq, delay);
+							}					
+						}
+						waves.add(newWave);
 					}
-					waves.add(newWave);
 				}
 			}
-			
-			
-			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -104,8 +100,6 @@ public class LevelData{
 	}
 
 	public ArrayList<PathPoint> getPath() {return path;}
-	//public ArrayList<Node> getEdgeA() {return edgeA;}
-	//public ArrayList<Node> getEdgeB() {return edgeB;}
 	public ArrayList<Shape> getEdges(){return edges;}
 	public ArrayList<Wave> getWaveData(){return waves;}
 }

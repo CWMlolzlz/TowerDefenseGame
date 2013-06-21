@@ -1,19 +1,16 @@
 package gui.modding;
 
-import game.Play;
-
-import java.util.ArrayList;
 import java.util.Random;
 
 import org.newdawn.slick.geom.Circle;
 
-import resources.Enemy;
 import resources.Turret;
 import resources.types.TurretType;
 
 public class EditableTurret extends Turret{
 
 	public EditableTurret(TurretType data){
+		super(data.COST);
 		numofBullets = data.numofBULLETS;
 		bDamage = data.bDamage;
 		bRange = data.bRange;

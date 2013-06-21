@@ -10,7 +10,7 @@ import org.newdawn.slick.particles.ParticleIO;
 
 public class Spark{
 
-	private static File file = new File("data/particles/spark.xml");
+	private static File file = Play.psXML;
 	public ConfigurableEmitter ce;
 	
 	public float x,y;

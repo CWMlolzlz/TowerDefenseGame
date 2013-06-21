@@ -1,13 +1,13 @@
 package gui.modding;
 
 import game.Play;
+import gui.Panel;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Circle;
 
 import resources.Enemy;
 import resources.Turret;
-import resources.data.TurretData;
 import resources.types.TurretType;
 
 public class Window extends Panel{
@@ -34,11 +34,10 @@ public class Window extends Panel{
 	}
 	
 	public void preview(){
-		System.out.println("hi");
 		Specs.updateTurretTypeData();
 		//TurretType tt = Specs.ttype;
 		turret = new EditableTurret(Specs.ttype);
-		turret.updatePlacement(this.x + 50,this.y + 50);
+		turret.updatePlacement(x + 50,y + 50);
 		Play.enemies.get(0).x = x + 60;
 		Play.enemies.get(0).y = y + 60;
 	}

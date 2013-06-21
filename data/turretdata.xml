@@ -6,10 +6,10 @@
 
 	<Turret id="2" name="Precision" cost="120" bDamage="1" bRange="200" bRateOfFire="1" bullets="1" bulletType="1" color="100-100-255"/>
 
-	<Turret id="3" name="RapidFire" cost="100" bDamage="3" bRange="100" bRateOfFire="10" bullets="1" bulletType="0" color="255-100-100"/>
+	<Turret id="3" name="RapidFire" cost="100" bDamage="4" bRange="100" bRateOfFire="10" bullets="1" bulletType="0" color="255-100-100"/>
 	<Turret id="4" name="Burst" cost="500" bDamage="5" bRange="120" bRateOfFire="6" bullets="1" bulletType="2" color="255-100-100"/>
 
-	<Turret id="5" name="Spread" cost="80" bDamage="8" bRange="100" bRateOfFire="2" bullets="3" bulletType="2" color="100-255-100"/>
+	<Turret id="5" name="Spread" cost="80" bDamage="15" bRange="100" bRateOfFire="2" bullets="3" bulletType="2" color="100-255-100"/>
 </TurretData>
 
 <UpgradeBranches>
@@ -39,7 +39,7 @@
 </UpgradeBranches>
 
 <BulletTypes>
-	<Bullet id="0" graphicName="Tracer" color="255-255-200" speed="12" accuracy="0.1" />
+	<Bullet id="0" graphicName="Tracer" color="255-255-200" speed="15" accuracy="0.1" />
 	<Bullet id="1" graphicName="Beam" color="90-150-255" speed="0" accuracy="0.02"/>
 	<Bullet id="2" graphicName="Shell" color="100-255-100" speed="8" accuracy="0.2"/>
 </BulletTypes>

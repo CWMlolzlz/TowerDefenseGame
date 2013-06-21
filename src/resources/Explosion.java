@@ -34,6 +34,7 @@ public class Explosion{
 	public void updateDecay(){
 		if(decay <= 10){
 			ce.setEnabled(false);
+			try {this.finalize();}catch(Throwable e){e.printStackTrace();}
 			Play.ps.removeEmitter(ce);
 			Play.explosions.remove(ce);
 		}else{

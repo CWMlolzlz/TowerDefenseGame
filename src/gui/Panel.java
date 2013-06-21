@@ -1,17 +1,21 @@
-package gui.modding;
+package gui;
+
+
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
-public class Panel {
+public class Panel{
 
-	float x,y;
+	protected float x,y;
 	
 	public Shape outline;
+	static Color color = Color.white;
 	
 	ArrayList<GUIElement> guielements = new ArrayList<GUIElement>();
 	
@@ -26,6 +30,7 @@ public class Panel {
 	}
 
 	public void draw(Graphics g) {
+		g.setColor(color);
 		g.draw(outline);
 		for(int i = 0; i < guielements.size(); i++){
 			guielements.get(i).draw(g);
@@ -41,5 +46,7 @@ public class Panel {
 		}
 		return null;
 	}
+
+	
 	
 }

@@ -1,5 +1,7 @@
 package gui.modding;
 
+import gui.GUIElement;
+
 import org.newdawn.slick.Graphics;
 
 public class Button extends GUIElement{

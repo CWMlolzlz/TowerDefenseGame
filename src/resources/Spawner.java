@@ -24,12 +24,10 @@ public class Spawner {
 	}
 	
 	public void update(){
-		if(tick == delay && canSpawn == false){
+		if(tick == delay && !canSpawn){
 			canSpawn = true;
 			tick = 0;
-		}
-		
-		if(canSpawn){
+		}else if(canSpawn){
 			if(numSpawned == quantity){
 				enabled = false;
 			}
@@ -39,7 +37,7 @@ public class Spawner {
 	}
 	
 	public EnemyType doSpawn(){
-		if(tick%interval == 0 && enabled && canSpawn){
+		if((tick%interval == 0)&& canSpawn){
 			numSpawned++;
 			return enemytype;
 		}else{

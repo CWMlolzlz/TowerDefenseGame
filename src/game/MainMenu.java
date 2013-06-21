@@ -2,10 +2,10 @@ package game;
 
 import gui.menus.LevelSelect;
 import gui.menus.LevelSelectButton;
-import gui.menus.Levels;
 import gui.menus.Menu;
 import gui.menus.MenuButton;
 import gui.menus.Options;
+import gui.menus.PlayMenu;
 import gui.menus.Top;
 
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import resources.Save;
 import resources.data.LevelListData;
 
 public class MainMenu extends BasicGameState{
@@ -39,6 +40,7 @@ public class MainMenu extends BasicGameState{
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
+		menus.clear();
 		width = gc.getWidth();
 		menus.add(new Top(0,0));
 		levellistdata.loadLevelData();
@@ -72,7 +74,7 @@ public class MainMenu extends BasicGameState{
 
 	@Override
 	public int getID() {
-		return 0;
+		return Launch.MENU;
 	}
 
 	//mouse clicks
@@ -83,7 +85,7 @@ public class MainMenu extends BasicGameState{
 				MenuButton b = m.getClickedButton(mousepoint);
 				if(b != null){
 					if(b instanceof LevelSelectButton){
-						Launch.playLevel(b.levelpath);
+						try {Launch.playLevel(b.levelpath, b.text);}catch(SlickException e){e.printStackTrace();}
 					}else{
 						checkEvent(b.getEvent());
 					}
@@ -102,7 +104,7 @@ public class MainMenu extends BasicGameState{
 				break;
 			case(PLAY):
 				removeMenus(PLAY);
-				menus.add(new Levels(menus.size()*200,0));
+				menus.add(new PlayMenu(menus.size()*200,0));
 				break;
 			case(OPTIONS):
 				removeMenus(OPTIONS);
@@ -119,6 +121,10 @@ public class MainMenu extends BasicGameState{
 				menus.add(new LevelSelect(menus.size()*200,0));
 				break;
 			case(RESUME):
+				if(Save.saveExists()){
+					Launch.play.loadSave();
+					Launch.changeState(Launch.PLAY);
+				}
 				break;
 		}
 		

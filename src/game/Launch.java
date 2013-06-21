@@ -22,22 +22,27 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 	private InputProvider provider;
 	
 	public static final String gamename = "TowerDefense";
-	public static final int MENU = 0; 
-	public static final int PLAY = 1;
-	public static final int MODDING = 2;
+	public static final int MENU = 1; 
+	public static final int PLAY = 2;
+	public static final int MODDING = 3;
+	public static final int LOGIN = 0;
 	
-	private static Play play = new Play();
-	private static MainMenu menu = new MainMenu();
-	private static Modding modding = new Modding();
+	public static Play play = new Play();
+	public static MainMenu menu = new MainMenu();
+	public static Modding modding = new Modding();
+	public static Login login = new Login();
 	
 	public static GameContainer gamecontainer;
 	private static StateBasedGame sbg;
+	
+	public static String USERNAME = "Guest";
 	
 	public Launch(String gamename){
 		super(gamename);
 		this.addState(menu);
 		this.addState(play);		
 		this.addState(modding);
+		this.addState(login);
 	}
 
 	@Override
@@ -53,7 +58,7 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 		provider.bindCommand(new KeyControl(Input.KEY_ENTER), enter);
 		provider.bindCommand(new KeyControl(Input.KEY_ESCAPE), escape);
 		
-		this.enterState(MENU);
+		this.enterState(LOGIN);
 		
 	}
 	
@@ -68,7 +73,9 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 	public void controlReleased(Command command) {
 		
 		if(command == leftclick){
-			if(this.getCurrentState() == menu){
+			if(this.getCurrentState() == login){
+				login.leftClick(this);
+			}else if(this.getCurrentState() == menu){
 				menu.leftClick(this);
 			}else if(isPlaying()){
 				play.leftClick(this);
@@ -89,8 +96,6 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 		
 	}
 	
-	
-
 	public static void quit(){gamecontainer.exit();}
 	
 	public static void changeState(int val){
@@ -113,9 +118,9 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 		}
 	}
 
-	public static void playLevel(String levelpath) {
-		play.loadLevel(levelpath);
-		changeState(PLAY);
+	public static void playLevel(String levelpath, String name) throws SlickException {
+		play.loadLevel(levelpath, name);
+		sbg.enterState(PLAY);
 	}	
 	
 	public static void main(String[] args) throws SlickException{

@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<Level>
+<PathPoints>
+		<Path>
+			<Point x="-10" y="-10"/>
+			<Point x="250" y="250"/>
+			<Point x="600" y="250"/>
+			<Point x="600" y="150"/>
+			<Point x="300" y="150"/>
+			
+
+			<Point x="300" y="50"/>
+			<Point x="700" y="50"/>
+			<Point x="700" y="500"/>
+			<Point x="500" y="500"/>
+			<Point x="500" y="350"/>
+			<Point x="150" y="350"/>
+			<Point x="150" y="620"/>
+		</Path>
+		<Edge>
+			<Point x="-10" y="-30"/>
+			<Point x="250" y="230"/>
+			<Point x="580" y="230"/>
+			<Point x="580" y="170"/>
+			<Point x="280" y="170"/>
+			<Point x="280" y="30"/>
+			<Point x="720" y="30"/>
+			<Point x="720" y="520"/>
+			<Point x="480" y="520"/>
+			<Point x="480" y="370"/>
+			<Point x="170" y="370"/>
+			<Point x="170" y="620"/>
+		</Edge>
+			
+		<Edge>
+			<Point x="-10" y="10"/>
+			<Point x="250" y="270"/>
+			<Point x="620" y="270"/>
+			<Point x="620" y="130"/>
+			<Point x="320" y="130"/>
+			<Point x="320" y="70"/>
+			<Point x="680" y="70"/>
+			<Point x="680" y="480"/>
+			<Point x="520" y="480"/>
+			<Point x="520" y="330"/>
+			<Point x="130" y="330"/>
+			<Point x="130" y="620"/>
+		</Edge>
+	</PathPoints>
+
+	<WaveData>
+		<Wave>
+			<Spawn enemyID="0" quantity="10" freq="30" delay="0"/>
+		</Wave>
+
+		<Wave>
+			<Spawn enemyID="1" quantity="20" freq="60" delay="0"/>
+		</Wave>
+
+		<Wave>
+			<Spawn enemyID="1" quantity="10" freq="60" delay="0"/>
+			<Spawn enemyID="3" quantity="5" freq="120" delay="0"/>
+		</Wave>
+
+	</WaveData>
+</Level>

@@ -1,27 +1,22 @@
 package game;
 
-import gui.menus.Menu;
+import gui.GUIElement;
+import gui.Panel;
 import gui.menus.MenuButton;
 import gui.modding.Button;
-import gui.modding.GUIElement;
-import gui.modding.Panel;
-import gui.modding.SideMenu;
+import gui.modding.ModdingMenu;
 import gui.modding.Specs;
 import gui.modding.TextArea;
 import gui.modding.Window;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.InputListener;
 import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.command.Command;
-import org.newdawn.slick.command.InputProviderListener;
 import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -39,13 +34,13 @@ public class Modding extends BasicGameState implements KeyListener{
 	private TextArea textAreaFocus = null;
 	
 	ArrayList<Panel> panels = new ArrayList<Panel>();
-	SideMenu smenu;
+	ModdingMenu moddingmenu;
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
 		panels.add(new Specs(200,0,300,300));
-		smenu = new SideMenu(0, 0);
+		moddingmenu = new ModdingMenu(0, 0);
 		win  = new Window(500,0,300,300);
 		//panels.add(win);
 		win.preview();
@@ -55,7 +50,7 @@ public class Modding extends BasicGameState implements KeyListener{
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
 		g.setAntiAlias(true);
-		smenu.draw(g);
+		moddingmenu.draw(g);
 		for(int i = 0; i < panels.size();i++){
 			panels.get(i).draw(g);
 		}
@@ -77,8 +72,8 @@ public class Modding extends BasicGameState implements KeyListener{
 				textAreaFocus.setToDefault();
 			}
 		}
-		if(smenu.outline.contains(mousepoint)){
-			MenuButton b = smenu.getClickedButton(mousepoint);
+		if(moddingmenu.outline.contains(mousepoint)){
+			MenuButton b = moddingmenu.getClickedButton(mousepoint);
 			if(b != null){
 				checkEvent(b.getEvent());
 			}
@@ -134,9 +129,7 @@ public class Modding extends BasicGameState implements KeyListener{
 	}
 
 	private void input(char c) {
-		Character chr = c;
 		if(textAreaFocus != null){
-			System.out.println("input");
 			if(Character.isLetter(c) && textAreaFocus.alpha){
 				textAreaFocus.addChar(c); 
 			}else if(Character.isDigit(c) && textAreaFocus.digits){
@@ -150,7 +143,7 @@ public class Modding extends BasicGameState implements KeyListener{
 	@Override
 	public int getID() {
 		// TODO Auto-generated method stub
-		return 2;
+		return Launch.MODDING;
 	}
 	
 }

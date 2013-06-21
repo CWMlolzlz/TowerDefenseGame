@@ -1,6 +1,8 @@
 package gui.modding;
 
 import game.Modding;
+import gui.Panel;
+import gui.Text;
 import resources.types.TurretType;
 
 public class Specs extends Panel{
@@ -16,7 +18,7 @@ public class Specs extends Panel{
 	public Specs(float x, float y, float w, float h) {
 		super(x, y, w, h);
 
-		addElement(new Text(230, 20, "ID"));
+		addElement(new Text(230, 20, 50,"ID", Text.LEFT));
 		
 		addElement(name);
 		addElement(cost);

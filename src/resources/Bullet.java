@@ -38,6 +38,7 @@ public class Bullet{
 	
 	public void step(){
 		if(x < -10 || y < -10 || x > 1000 || y > 1000){
+			try {this.finalize();}catch(Throwable e){e.printStackTrace();}
 			Play.removeBullet(this);
 		}else{
 			x -= speed*cos(angle);
@@ -85,7 +86,6 @@ public class Bullet{
 
 	public void hit(Enemy e) {
 		if(decay > 0.5f){
-			
 			e.damage(DAMAGE, graphic.contains("Beam"));
 		}else if(decay <= 0){
 			Play.removeBullet(this);

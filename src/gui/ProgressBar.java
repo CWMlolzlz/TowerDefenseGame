@@ -1,12 +1,10 @@
 package gui;
 
-import game.Play;
 
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Shape;
 
@@ -16,7 +14,8 @@ public class ProgressBar{
 	protected Color color = new Color(Color.green);
 	
 	int missed = 0;
-	
+	int added = 0;
+		
 	public Shape outline;
 	public Shape fill;
 	public String bottomtext;
@@ -56,35 +55,12 @@ public class ProgressBar{
 		progressend = max;
 	}
 	
-	public void update(boolean bad){
+	public void update(){
 		progress++;
-		if(bad){
-			missed++;
-		}
 	}
 
-	public void draw(Graphics g){
-		
-		g.setAntiAlias(true);
-		g.setColor(Color.black);
-		g.fill(new Circle(x,y,radius));
-		for(int i = 0; i < progress;i++){
-			Wedge w = wedges.get(i);
-			//g.setColor(color);
-			if(i > progress-missed){
-				w.fill(g,Color.red);
-
-			}else{
-				w.fill(g,color);
-			}
-			if(progressend < 60){
-				//g.setColor(Color.black);
-				w.draw(g,Color.black);
-			}
-			
-		}
-		
-	}
+	
+	
 	
 }
 

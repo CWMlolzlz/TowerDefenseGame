@@ -41,7 +41,7 @@ public class MenuButton{
 	}
 
 	public boolean mouseInButton(float x, float y){
-		if((xpos<x && x<xpos+width) && (ypos<y && y<ypos+height)){
+		if(shape.contains(x, y)){
 			return true;
 		}else{
 			return false;

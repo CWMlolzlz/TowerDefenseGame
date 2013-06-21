@@ -1,5 +1,7 @@
 package gui.modding;
 
+import gui.GUIElement;
+
 public class TextArea extends GUIElement{
 
 	private static float width = 180, height = 30;
@@ -21,6 +23,10 @@ public class TextArea extends GUIElement{
 		setToDefault();
 	}
 
+	public TextArea(int newx, int newy, String string, String character){
+		super(newx, newy,width,height);
+	}
+
 	public void select(){
 		if(isDefaultText()){
 			text = "";
@@ -33,7 +39,6 @@ public class TextArea extends GUIElement{
 
 	public void backSpace() {
 		if(!(text.length() == 0 || text == defaulttext)){
-			System.out.println(text.length());
 			text = text.substring(0, text.length()-1);
 		}else{
 			text = defaulttext;

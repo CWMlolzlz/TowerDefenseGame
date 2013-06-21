@@ -13,6 +13,7 @@ public class Menu{
 
 	public int width = 200, height = 600;
 	
+	public String title;
 	public float x,y,endx,endy;
 	
 	public Shape outline;
@@ -20,12 +21,18 @@ public class Menu{
 	
 	public int tick = 0;
 	public int length = 45;
-	float k;
+	float k = 1;
 	
-	public Menu(float newx, float newy){
-		endx = newx;
-		endy = newy;
-		k = (float)(Launch.gamecontainer.getWidth()-endx)/(length*length);
+	public Menu(float newx, float newy, String t, boolean still){
+		title = t;
+		if(still){
+			x = newx;
+			tick = length;
+		}else{
+			endx = newx;
+			endy = newy;
+			k = (float)(Launch.gamecontainer.getWidth()-endx)/(length*length);
+		}
 		update();
 	}
 	
@@ -34,6 +41,7 @@ public class Menu{
 		g.setColor(Color.black);
 		g.fill(outline);
 		g.setColor(Color.white);
+		g.drawString(title, x+20, y+20);
 		g.draw(outline);
 		for(int j = 0; j < buttons.size(); j++){
 			MenuButton button = buttons.get(j);

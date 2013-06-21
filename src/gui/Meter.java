@@ -3,12 +3,10 @@ package gui;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.geom.Circle;
 
 public class Meter {
 	
 	private Color color;
-	private TrueTypeFont font;
 	public String text;
 	
 	public int value;
@@ -23,7 +21,7 @@ public class Meter {
 		y = newy;
 		width = w;
 		color = c;
-		font = f;
+		//font = f;
 	}
 	
 	public void draw(Graphics g){
