@@ -1,4 +1,4 @@
-package gui;
+package gui.game;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -31,6 +31,9 @@ public class LevelProgress extends ProgressBar{
 			}
 			
 		}
+		g.setColor(Color.gray);
+		g.setLineWidth(2);
+		g.draw(new Circle(x,y,radius));
 		
 	}
 	

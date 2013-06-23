@@ -35,22 +35,19 @@ public class TextBox extends GUIElement{
 	}
 
 	public void backSpace() {
-		if(!(text.length() == 0 || text == defaulttext)){
+		if(truetext.length() != 0){
 			text = text.substring(0, text.length()-1);
 			truetext = truetext.substring(0, truetext.length()-1);
-		}else{
-			truetext = "";
-			text = defaulttext;
 		}
-		
 	}
 	
 	public void setToDefault(){
 		text = defaulttext;
+		truetext = "";
 	}
 	
 	public boolean isEmpty(){
-		return (truetext.isEmpty());
+		return truetext.isEmpty();
 	}
 	
 	public boolean isDefaultText(){return text==defaulttext;}

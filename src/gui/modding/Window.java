@@ -24,7 +24,7 @@ public class Window extends Panel{
 	}	
 	
 	public void draw(Graphics g){
-		g.draw(outline);
+		g.draw(shape);
 		g.fill(new Circle(turret.x,turret.y,turret.radius));
 		g.draw(Play.enemies.get(0).getShape());
 	}

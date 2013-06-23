@@ -1,9 +1,9 @@
 package gui.login;
 
 import game.Login;
+import gui.Button;
 import gui.Panel;
 import gui.TextBox;
-import gui.modding.Button;
 
 public class CreateAccountPanel extends Panel{
 
@@ -17,13 +17,18 @@ public class CreateAccountPanel extends Panel{
 	
 	public CreateAccountPanel(float x, float y, float w, float h) {
 		super(x, y, w, h);
-		addElement(username);
 		addElement(email);
+		addElement(username);
 		addElement(password);
 		addElement(passwordCheck);
 		addElement(createAccount);
 		addElement(backtologin);
 
+		createAccount.w = 140;
+		createAccount.updateShape();
+		
+		backtologin.w = 140;
+		backtologin.updateShape();
 	}
 
 	public boolean passwordMatch() {

@@ -1,6 +1,7 @@
 package gui.menus;
 
 import game.MainMenu;
+import gui.Menu;
 
 import java.util.ArrayList;
 
@@ -17,7 +18,7 @@ public class LevelSelect extends Menu{
 			String text = linfo.NAME;
 			String description = linfo.DESCRIPTION;
 			String path = linfo.PATH;
-			addButton(new LevelSelectButton(text, path, 20, +((i+1)*50)));
+			addElement(new LevelSelectButton(text, path, 20, ((i+1)*50)));
 		}	
 	}	
 }

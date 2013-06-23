@@ -1,24 +1,13 @@
 package gui.menus;
 
-import org.newdawn.slick.geom.Rectangle;
+import gui.Button;
 
-public class LevelSelectButton extends MenuButton{
+public class LevelSelectButton extends Button{
 
 	public String levelpath;
 	
-	public String text;
-	
-	public Rectangle shape;
-	public float xpos, ypos;
-	
 	public LevelSelectButton(String string, String path, float x, float y){
-		super(string,path,x,y);
-		text = string;
-		levelpath = path;
-		xpos = x;
-		ypos = y;
-		
+		super(string,x,y,-2);
+		levelpath = path;		
 	}
-	
-	public String getLevelPath(){return levelpath;}
 }

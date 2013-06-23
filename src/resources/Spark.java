@@ -32,10 +32,11 @@ public class Spark{
 	}
 	
 	public void updateDecay(){
-		if(decay <= 10){
+		if(decay <= 0){
 			ce.setEnabled(false);
 			Play.ps.removeEmitter(ce);
 			Play.sparks.remove(ce);
+			
 		}else{
 			decay--;
 		}

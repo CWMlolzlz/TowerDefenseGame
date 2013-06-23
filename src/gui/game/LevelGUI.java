@@ -1,14 +1,14 @@
-package gui;
+package gui.game;
 
 import game.Play;
+import gui.GUIElement;
+import gui.Meter;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Circle;
 
-import resources.Fonts;
-
-public class LevelGUI{
+public class LevelGUI extends GUIElement{
 	
 	//Font font = new Font("Salaryman",Font.PLAIN,12);
 	//TrueTypeFont unifont = new TrueTypeFont(font, false);
@@ -19,6 +19,7 @@ public class LevelGUI{
 	
 	float x1=55,y1=545;
 	float x2=110,y2=575;
+	float x3=120,y3=540;
 	
 	float wavepbarradius = 40;
 	float lpbarradius = 50;
@@ -26,48 +27,53 @@ public class LevelGUI{
 	
 	
 	Meter credits;
+	Meter score;
 	Meter nextTurretCost;
 	
 	public LevelGUI(float width, float height){
-		credits = new Meter(x1, y1-6, 30, new Color(200,100,0), Fonts.salaryman_bold);
-		nextTurretCost = new Meter(x1,y1+6,0,new Color(0,50,200), Fonts.salaryman_bold);
+		super(height, height, height, height);
+		credits = new Meter(x1, y1-12,new Color(200,100,0));
+		score = new Meter(x3,y3-9,new Color(200,100,100));
+		nextTurretCost = new Meter(x1,y1,new Color(0,50,200));
+		
 		bhb = new BaseHealthBar(x2,y2, bhbradius);
 		updateTurretCostText();
 	}
 	
 	public void update(){
-		credits.setValue((int) Play.credits);
+		credits.setText(String.valueOf((int) Play.credits));
+		score.setText(String.valueOf((int) Play.score));
 	}
 	
 	public void draw(Graphics g){
 		//g.setFont(unifont);
 		g.setLineWidth(4);
-		//health
-		bhb.draw(g);
+		
+		g.setColor(Color.black);
+		g.fill(new Circle(x3,y3,18));
 		g.setColor(Color.gray);
 		g.setLineWidth(2);
-		g.draw(new Circle(x2,y2,bhbradius));
+		g.draw(new Circle(x3,y3,18));
+		//health
+		bhb.draw(g);
+		
 				
 		//level progression
 		lpbar.draw(g);
 		wavepbar.draw(g);
 		
 		g.setColor(Color.black);
-		//g.fill(new Circle(x1,y1,pbarradius));
 		g.fill(new Circle(x1,y1,25));
-		
-		//g.fill(new Circle(x2,y2,bhbradius));
+			
 		
 		g.setColor(Color.gray);
 		g.setLineWidth(2);
-		
-		g.draw(new Circle(x1,y1,wavepbarradius));
-		g.draw(new Circle(x1,y1,lpbarradius));
 		g.draw(new Circle(x1,y1,25));
-		
+			
 		//text
 		credits.draw(g);
 		nextTurretCost.draw(g);
+		score.draw(g);
 	}
 	
 	public void setProgressBar(int val){
@@ -87,6 +93,6 @@ public class LevelGUI{
 	}
 	
 	public void updateTurretCostText(){
-		nextTurretCost.setValue(Play.getNextTurretCost());
+		nextTurretCost.setText(String.valueOf(Play.getNextTurretCost()));
 	}
 }

@@ -38,7 +38,6 @@ public class Bullet{
 	
 	public void step(){
 		if(x < -10 || y < -10 || x > 1000 || y > 1000){
-			try {this.finalize();}catch(Throwable e){e.printStackTrace();}
 			Play.removeBullet(this);
 		}else{
 			x -= speed*cos(angle);

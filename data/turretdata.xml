@@ -3,39 +3,60 @@
 <TurretData>
 	<Turret id="0" name="Basic" cost="0" bDamage="8" bRange="100" bRateOfFire="2" bullets="1" bulletType="0" color="255-255-255"/>
 	<Turret id="1" name="Power" cost="50" bDamage="10" bRange="120" bRateOfFire="3" bullets="1" bulletType="0" color="255-200-100"/>
-
 	<Turret id="2" name="Precision" cost="120" bDamage="1" bRange="200" bRateOfFire="1" bullets="1" bulletType="1" color="100-100-255"/>
 
 	<Turret id="3" name="RapidFire" cost="100" bDamage="4" bRange="100" bRateOfFire="10" bullets="1" bulletType="0" color="255-100-100"/>
-	<Turret id="4" name="Burst" cost="500" bDamage="5" bRange="120" bRateOfFire="6" bullets="1" bulletType="2" color="255-100-100"/>
+	<Turret id="4" name="Burst" cost="500" bDamage="5" bRange="120" bRateOfFire="6" bullets="1" bulletType="2" color="255-200-100"/>
+	<Turret id="5" name="Sprayer" cost="200" bDamage="3" bRange="80" bRateOfFire="20" bullets="1" bulletType="0" color="255-100-200"/>
 
-	<Turret id="5" name="Spread" cost="80" bDamage="15" bRange="100" bRateOfFire="2" bullets="3" bulletType="2" color="100-255-100"/>
+	<Turret id="6" name="Shotgun" cost="80" bDamage="15" bRange="100" bRateOfFire="2" bullets="3" bulletType="2" color="100-255-100"/>
+	<Turret id="7" name="L-Fire" cost="150" bDamage="5" bRange="100" bRateOfFire="1" bullets="10" bulletType="2" color="100-255-200"/>
+	<Turret id="8" name="U-Fire" cost="200" bDamage="3" bRange="100" bRateOfFire="1" bullets="20" bulletType="2" color="200-255-100"/>
 </TurretData>
 
 <UpgradeBranches>
+	<!--Basic turret-->
 	<Upgrade id="0">
 		<Branch result="1"/>
 	</Upgrade>
 
+	<!--Power turret-->
 	<Upgrade id="1">
 		<Branch result="2"/>
 		<Branch result="3"/>
-		<Branch result="5"/>
+		<Branch result="6"/>
 	</Upgrade>
 
-	<Upgrade id="2">
-	</Upgrade>
+		<!--Precision turret-->
+		<Upgrade id="2">
+		</Upgrade>
+		
 
-	<Upgrade id="3">
-		<Branch result="4"/>
-	</Upgrade>
+		<!--RapidFire turret-->
+		<Upgrade id="3">
+			<Branch result="5"/>
+			
+		</Upgrade>
+			<!--Burst turret-->
+			<Upgrade id="4">
+			</Upgrade>
 
-	<Upgrade id="4">
-	</Upgrade>
+			<!--Sprayer turret-->
+			<Upgrade id="5">
+			</Upgrade>
 
-	<Upgrade id="5">
-	</Upgrade>
-	
+		<!--Shotgun turret-->
+		<Upgrade id="6">
+			<Branch result="7"/>
+			<Branch result="8"/>
+		</Upgrade>
+			<!--L-Fire turret-->
+			<Upgrade id="7">
+			</Upgrade>
+			<!--U-Fire turret-->
+			<Upgrade id="8">
+			</Upgrade>
+
 </UpgradeBranches>
 
 <BulletTypes>

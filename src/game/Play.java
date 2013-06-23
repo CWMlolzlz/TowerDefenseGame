@@ -1,10 +1,13 @@
 package game;
 
-import gui.LevelCompleteMenu;
-import gui.LevelGUI;
-import gui.PauseMenu;
-import gui.menus.Menu;
-import gui.menus.MenuButton;
+import gui.Button;
+import gui.GUIElement;
+import gui.Menu;
+import gui.game.HighScoresMenu;
+import gui.game.LevelCompleteMenu;
+import gui.game.LevelGUI;
+import gui.game.PauseMenu;
+import gui.game.TurretGUI;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,7 +28,6 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import resources.Bullet;
-import resources.Button;
 import resources.Enemy;
 import resources.Explosion;
 import resources.PathPoint;
@@ -33,7 +35,6 @@ import resources.Save;
 import resources.Spark;
 import resources.Spawner;
 import resources.Turret;
-import resources.TurretGUI;
 import resources.Wave;
 import resources.data.EnemyData;
 import resources.data.LevelData;
@@ -70,7 +71,6 @@ public class Play extends BasicGameState{
 	public static int enemiesDone;
 	public static LevelGUI LGUI;
 	private Wave wave;
-	public int delay = 0;
 	
 	public static final int RESUME = 0, RESTART = 1, NEXTLEVEL = 2, UPLOAD_SCORE = 3, SAVE = 4, LOADLASTCHECKPOINT = 5, MAINMENU = 8, QUIT = 9;
 	public static TurretData TDATA;
@@ -85,20 +85,22 @@ public class Play extends BasicGameState{
 	//input
 	public Input i;
 	private static Menu sidemenu;
+	private static HighScoresMenu extendedmenu;
 	
-	public static Circle mp = new Circle(Mouse.getX(), Mouse.getY(), 3f);
+	public static Point mp;
+	public static Circle cursor;
 	
 	private final int NONE = 0, BUILDINGTURRET = 1, EDITINGTURRET = 2, HOVERTURRET = 3;
-	private TurretGUI tGUI;
+	private static TurretGUI tGUI;
 	private Turret tOnHand;
 	private Turret selectedTurret;
 	
 	public static int selectstatus;
 	public boolean paused;
 	
-	public static int baseHealth;
+	public static float baseHealth;
 	public static float credits;
-	private static float score;
+	public static float score;
 	
 	private void reset(){
 		
@@ -127,9 +129,9 @@ public class Play extends BasicGameState{
 		selectedTurret = null;
 		paused = false;
 		sidemenu = null;
+		extendedmenu = null;
 		
 		currentWave = 1;
-		delay = 0;
 		breaktick = 0;
 		breakTimeLimit = 300;
 		gamestage = BREAK;
@@ -155,8 +157,7 @@ public class Play extends BasicGameState{
 		levelname = name;
 		leveldata = new LevelData(levelpath);
 		reset();
-		net.uploadScore(100, "Connor", levelpath);
-		
+				
 		waves = leveldata.getWaveData();
 		maximumWaves = waves.size();
 		
@@ -220,8 +221,8 @@ public class Play extends BasicGameState{
 		g.drawString("MEM in use: " + (Runtime.getRuntime().totalMemory()/1000000) + "(MB)", 150, 580);
 				
 		//path
-		g.setColor(Color.cyan);
-		g.draw(path);
+		//g.setColor(Color.cyan);
+		//g.draw(path);
 		g.setColor(Color.blue);
 		for(int i = 0; i < edges.size(); i++){
 			g.draw(edges.get(i));
@@ -262,10 +263,6 @@ public class Play extends BasicGameState{
 			g.draw(bullet.getShape());
 		}
 		
-		LGUI.draw(g);
-		
-		g.setLineWidth(1);
-		
 		//turret on hand
 		if(tOnHand != null){
 			if(tOnHand.valid){
@@ -276,35 +273,32 @@ public class Play extends BasicGameState{
 			g.draw(tOnHand.getCircle());
 		}
 		
+		if(tGUI !=null){
+			tGUI.draw(g);
+		}
+		
 		if(ps != null){
 			ps.render();
 		}
-				
+		
+		LGUI.draw(g);	
+		g.setLineWidth(1);
 		//turret gui
 		if(tGUI != null){
-			g.setColor(Color.black);
-			g.fill(tGUI.getShape());
-			g.setColor(Color.orange);
-			g.draw(tGUI.getShape());
-			ArrayList<Button> buttons = tGUI.getButtons();
-			for(int b = 0; b < buttons.size(); b++){
-				Button button = buttons.get(b);
-				if(button.getCost() > credits){
-					g.setColor(Color.gray);
-				}else{
-					g.setColor(Color.green);
-				}
-				g.draw(button.getShape());
-				g.drawString(button.getText(), button.getTextX(), button.getTextY());
-			}
+			tGUI.draw(g);
+			
 		}
 		
 		//cursor
 		if(sidemenu != null){
 			sidemenu.draw(g);
+			if(extendedmenu != null){
+				extendedmenu.update();
+				extendedmenu.draw(g);
+			}
 		}else{
 			g.setColor(Color.white);
-			g.draw(mp);
+			g.draw(cursor);
 		}
 			
 	}
@@ -313,16 +307,17 @@ public class Play extends BasicGameState{
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
 		
-		mp = new Circle(Mouse.getX(), gc.getHeight()-Mouse.getY(), 3f);
+		mp = new Point(Mouse.getX(), gc.getHeight()-Mouse.getY());
+		cursor = new Circle(mp.getCenterX(), mp.getCenterY(), 3);
 		if(!(sidemenu instanceof PauseMenu)){
 			//AI step
 			gameUpdate();
 			
 			if(sidemenu == null){
-				Turret collidingturret = getCollidingTurret(mp);
+				Turret collidingturret = getCollidingTurret(cursor);
 				//TURRET PLACING POSITION
 				if(tOnHand != null){
-					tOnHand.updatePlacement(mp.getCenterX(), mp.getCenterY());
+					tOnHand.updatePlacement(cursor.getCenterX(), cursor.getCenterY());
 					selectedTurret = tOnHand;
 					if(getCollidingTurret(tOnHand.getCircle()) != null || isCollidingPath(tOnHand.getCircle())){
 						tOnHand.valid = false;
@@ -344,7 +339,7 @@ public class Play extends BasicGameState{
 				
 			}
 			
-			ps.update(17);
+			ps.update(15);
 			for(int s = 0; s < sparks.size(); s++){
 				sparks.get(s).updateDecay();
 			}
@@ -407,9 +402,6 @@ public class Play extends BasicGameState{
 		enemiesDone = 0;
 		wave = waves.get(currentWave-1);
 		currentWave++;
-		if(wave.save){
-			makeSave();
-		}
 		enemiesInWave = 0;
 		for(int s = 0; s < wave.spawnData.size(); s++){
 			SpawnData sd = wave.spawnData.get(s);
@@ -423,10 +415,13 @@ public class Play extends BasicGameState{
 		//credit interest
 		creditInterest();
 		if(enemiesDone == enemiesInWave){
-			if(currentWave == maximumWaves){
+			if(currentWave == maximumWaves+1){
 				gamestage = COMPLETE;
 				completeLevel();
 			}else{
+				if(wave.save){
+					makeSave();
+				}
 				LGUI.setProgressBar(breakTimeLimit);
 				gamestage = BREAK;
 			}
@@ -458,10 +453,11 @@ public class Play extends BasicGameState{
 	}
 
 	private void creditInterest(){
-		credits *= 1.00012f;
+		pay(credits *0.00012f);
 	}
 
 	public static void enemyKilled(Enemy e){
+		score += e.radius;
 		enemies.remove(e);
 		enemiesDone++;
 		LGUI.wavepbar.killed();
@@ -488,7 +484,9 @@ public class Play extends BasicGameState{
 	}
 	
 	private void clickedPauseMenu() {
-		MenuButton mb = sidemenu.getClickedButton(new Point(mp.getCenterX(),mp.getCenterY()));
+		GUIElement ge = sidemenu.getClickedElement(new Point(mp.getCenterX(),mp.getCenterY()));
+		if(ge instanceof Button){
+			Button mb = (Button)ge;
 		if(mb != null){
 			int e = mb.getEvent();
 			switch(e){
@@ -501,10 +499,14 @@ public class Play extends BasicGameState{
 			case(NEXTLEVEL):
 				break;
 			case(UPLOAD_SCORE):
-				net.uploadScore(score+(credits*2),levelname,levelpath);
+				String[] scores = net.uploadScore((int)(score+(credits*1.5)*(baseHealth/100)),levelpath);
+				extendedmenu = new HighScoresMenu(200, 0, scores);
+				
 				break;
 			case(LOADLASTCHECKPOINT):
-				loadSave();
+				if(Save.saveExists()){
+					loadSave();
+				}
 				break;
 			case(MAINMENU):
 				enterState(Launch.MENU);
@@ -514,11 +516,12 @@ public class Play extends BasicGameState{
 				break;
 			}
 		}
+		}
 
 	}
 
 	public void makeSave(){
-		Save.newSave(levelpath, levelname, currentWave, credits, score, turrets);
+		Save.newSave(levelpath, levelname, currentWave, (int)baseHealth, credits, score, turrets);
 	}
 	
 	public void loadSave(){
@@ -528,7 +531,7 @@ public class Play extends BasicGameState{
 		credits = sd.credits;
 		score = sd.score;
 		turrets = sd.turrets;
-		for(int i = 0; i < currentWave; i++){
+		for(int i = 1; i < currentWave; i++){
 			LGUI.updateLevelProgress();
 		}
 		LGUI.updateTurretCostText();
@@ -536,57 +539,59 @@ public class Play extends BasicGameState{
 	
 	private void clickedLevel(){
 		switch(selectstatus){
-		case(NONE): //NONE ==> BUILDING
-			tOnHand = new Turret(Play.turrets.size());
-			selectstatus = BUILDINGTURRET;
-			break;
-		case(BUILDINGTURRET): //BUILDING ==> NONE
-			int tcost = getNextTurretCost();
-			if(tOnHand.valid && credits >= tcost){ //optimise detection for both cases
-				//can place turret
-				placeTurret(tOnHand);
-				credits -= tcost;
-			}else{
-				//cant place turret
+			case(NONE): //NONE ==> BUILDING
+				tOnHand = new Turret();
+				selectstatus = BUILDINGTURRET;
+				break;
+			case(BUILDINGTURRET): //BUILDING ==> NONE
+				int tcost = getNextTurretCost();
+				if(tOnHand.valid && credits >= tcost){ //optimise detection for both cases
+					//can place turret
+					placeTurret(tOnHand, tcost);
+					credits -= tcost;
+				}else{
+					//cant place turret
+					selectstatus = NONE;
+				}
+				tOnHand = null;
 				selectstatus = NONE;
-			}
-			tOnHand = null;
-			selectstatus = NONE;
-			break;
-		case(HOVERTURRET): //HOVERING ==> EDITING
-			if(tOnHand == null){
-				selectstatus = EDITINGTURRET;
-				selectedTurret = getCollidingTurret(mp);
-				tGUI = new TurretGUI(selectedTurret, gamecont);
-			}
-			break;
-		case(EDITINGTURRET):
-			selectObject();
-			break;
+				break;
+			case(HOVERTURRET): //HOVERING ==> EDITING
+				if(tOnHand == null){
+					selectstatus = EDITINGTURRET;
+					selectedTurret = getCollidingTurret(cursor);
+					tGUI = new TurretGUI(selectedTurret);
+					tGUI.checkAffordability((int)credits);
+				}
+				break;
+			case(EDITINGTURRET):
+				selectObject();
+				break;
 		}
 	}
 	
 	public void selectObject(){
-		Turret ct = getCollidingTurret(mp);
-		if(isColliding(mp, tGUI.getShape())){
+		Turret ct = getCollidingTurret(cursor);
+		if(isColliding(cursor, tGUI.shape)){
 			//clicked GUI
-			Button button = tGUI.click(mp);
+			Button button = (Button) tGUI.getClickedElement(mp);
 			if(button != null){
-				selectedTurret = tGUI.getTarget();
-				int cost = button.getCost();
+				selectedTurret = tGUI.target;
 				int eventval = button.getEvent();
 				switch(eventval){
 					case(-1):
-						sellTurret(tGUI.getTarget());
+						sellTurret(selectedTurret);
 						tGUI = null;
 						selectedTurret = null;
 						selectstatus  = NONE;
 						break;
 					default:
+						int cost = TDATA.getTurretType(eventval).COST;
 						if(credits - cost >= 0){
-							tGUI.getTarget().upgrade(eventval);
+							tGUI.target.upgrade(eventval);
 							credits -= cost;
-							tGUI.loadUpgrades();
+							tGUI = new TurretGUI(selectedTurret);
+							tGUI.checkAffordability((int)credits);
 						}else{
 							//cannot afford upgrade
 						}	
@@ -594,10 +599,11 @@ public class Play extends BasicGameState{
 				}
 							
 			}
-		}else if(ct != null && ct != tGUI.getTarget()){
+		}else if(ct != null && ct != tGUI.target){
 			//clicked turret not associated with GUI
 			selectedTurret = ct;
-			tGUI = new TurretGUI(ct, gamecont);
+			tGUI = new TurretGUI(selectedTurret);
+			tGUI.checkAffordability((int)credits);
 		}else{
 			//creates GUI, none exist
 			tGUI = null;
@@ -617,11 +623,7 @@ public class Play extends BasicGameState{
 	}
 	
 	public boolean isClickingGUI(){
-		if(tGUI.getShape().contains(mp)){
-			return true;
-		}else{
-			return false;
-		}
+		return tGUI.shape.contains(mp);
 	}
 	
 	public boolean isCollidingPath(Shape object){
@@ -660,14 +662,13 @@ public class Play extends BasicGameState{
 		}
 	}
 	
-	public void placeTurret(Turret turret){
+	public void placeTurret(Turret turret,int cost){
 		turrets.add(turret);
-		turret.place();
+		turret.place(cost);
 		LGUI.updateTurretCostText();
 	}
 	
 	public void sellTurret(Turret target) {
-		System.out.println("Solf for: " + target.value);
 		score -= target.value;
 		credits += target.value*.75f;
 		turrets.remove(target);
@@ -683,7 +684,12 @@ public class Play extends BasicGameState{
 	public int getID(){return Launch.PLAY;}
 	public static void enterState(int val){Launch.changeState(val);}	
 	
-	public static void pay(int val){credits += val;}
+	public static void pay(float f){
+		credits += f;
+		if(tGUI != null){
+			tGUI.checkAffordability((int)credits);
+		}
+	}
 
 	public void togglePause(){
 		if(sidemenu == null || sidemenu instanceof PauseMenu){

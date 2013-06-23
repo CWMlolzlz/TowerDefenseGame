@@ -1,52 +1,53 @@
 package gui;
 
-
-
-import java.util.ArrayList;
-
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Point;
-import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
 
-public class Panel{
+public class Panel extends GUIElement{
 
-	protected float x,y;
+	public Button defaultButton;
 	
-	public Shape outline;
-	static Color color = Color.white;
-	
-	ArrayList<GUIElement> guielements = new ArrayList<GUIElement>();
-	
-	public Panel(float x, float y,float w, float h){
-		outline = new Rectangle(x,y,w,h);
-		this.x = x;
-		this.y = y;
+	public Panel(float newx, float newy,float w, float h){
+		super(newx, newy, w, h);
+		x = newx;
+		y = newy;
 	}
 	
-	public void addElement(GUIElement e){
-		guielements.add(e);
-	}
-
-	public void draw(Graphics g) {
+	/**
+	public void draw(Graphics g){
 		g.setColor(color);
 		g.draw(outline);
 		for(int i = 0; i < guielements.size(); i++){
 			guielements.get(i).draw(g);
 		}
 	}
+	**/
 
 	public GUIElement getClickedElement(Point mousepoint) {
 		for(int i = 0; i < guielements.size();i++){
 			GUIElement guie = guielements.get(i);
-			if(guie.shape !=null && guie.shape.contains(mousepoint)){
-				return guie;
+			if(guie.shape !=null){
+				if(guie.shape.contains(mousepoint)){
+					return guie;
+				}
 			}
 		}
 		return null;
 	}
 
-	
+	public TextBox nextTextBox(TextBox tb){
+		int textBoxIndex = guielements.indexOf(tb);
+		TextBox nextTB = null;
+		for(int i = textBoxIndex + 1; i <= guielements.size(); i++){
+			if(i == guielements.size()){
+				i = 0;
+			}
+			GUIElement ge = guielements.get(i);
+			if(ge instanceof TextBox){
+				nextTB = (TextBox)ge;
+				break;
+			}
+		}
+		return nextTB;
+	}
 	
 }

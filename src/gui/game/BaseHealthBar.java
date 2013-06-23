@@ -1,4 +1,4 @@
-package gui;
+package gui.game;
 
 import game.Play;
 
@@ -17,7 +17,7 @@ public class BaseHealthBar extends ProgressBar{
 	}
 	
 	public void update(){
-		progress = Play.baseHealth;
+		progress = (int) Play.baseHealth;
 		
 		int r = (int) (512-((float)(progress/start))*512);
 		int g = (int) (((float)(progress/start))*512);
@@ -33,10 +33,11 @@ public class BaseHealthBar extends ProgressBar{
 		g.fill(new Circle(x,y,radius));
 		g.setColor(color);
 		for(int i = 0; i < progress;i++){
-			
 			wedges.get(i).fill(g,color);
 		}
-		
+		g.setColor(Color.gray);
+		g.setLineWidth(2);
+		g.draw(new Circle(x,y,radius));
 	}
 	
 }

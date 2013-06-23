@@ -1,9 +1,9 @@
 package game;
 
+import gui.Button;
 import gui.GUIElement;
+import gui.Menu;
 import gui.Panel;
-import gui.menus.MenuButton;
-import gui.modding.Button;
 import gui.modding.ModdingMenu;
 import gui.modding.Specs;
 import gui.modding.TextArea;
@@ -34,7 +34,7 @@ public class Modding extends BasicGameState implements KeyListener{
 	private TextArea textAreaFocus = null;
 	
 	ArrayList<Panel> panels = new ArrayList<Panel>();
-	ModdingMenu moddingmenu;
+	Menu moddingmenu;
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
@@ -72,15 +72,18 @@ public class Modding extends BasicGameState implements KeyListener{
 				textAreaFocus.setToDefault();
 			}
 		}
-		if(moddingmenu.outline.contains(mousepoint)){
-			MenuButton b = moddingmenu.getClickedButton(mousepoint);
-			if(b != null){
-				checkEvent(b.getEvent());
+		if(moddingmenu.shape.contains(mousepoint)){
+			GUIElement ge = moddingmenu.getClickedElement(mousepoint);
+			if(ge instanceof Button){
+				Button b = (Button) ge;
+				if(b != null){
+					checkEvent(b.getEvent());
+				}
 			}
 		}else{
 			for(int i = 0; i < panels.size();i++){
 				Panel p = panels.get(i);
-				if(p.outline.contains(mousepoint)){
+				if(p.shape.contains(mousepoint)){
 					GUIElement e = p.getClickedElement(mousepoint);
 					if(e instanceof Button){
 						checkEvent(((Button) e).getEvent());

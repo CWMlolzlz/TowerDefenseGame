@@ -41,11 +41,11 @@ public class Turret {
 	
 	protected int ID = 0;
 	
-	public Turret(int val){
+	public Turret(){
 		placed = false;
 		valid = false;
 		area = new Circle(x,y,radius);
-		value = val;
+		
 		updateSpecs();
 	}
 
@@ -62,7 +62,7 @@ public class Turret {
 		rateoffire = bRateOfFire; // blah blah blah
 		color = data.COLOR;
 		
-		
+		if(ID != 0){value += data.COST;}
 		
 		bullettypeID = data.BULLETTYPE;
 		bullet = tdata.getBulletType(bullettypeID);
@@ -70,7 +70,8 @@ public class Turret {
 		rangecircle = new Circle(area.getCenterX(),area.getCenterY(),range);
 	}
 
-	public void place(){
+	public void place(int val){
+		value = val;
 		placed = true;
 		updateSpecs();
 	}

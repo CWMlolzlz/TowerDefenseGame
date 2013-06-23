@@ -2,7 +2,6 @@ package resources;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 
@@ -25,7 +24,7 @@ public class Save{
 
 	static File file = new File("data/save.xml");
 	
-	public static void newSave(String levelpath, String levelname, int wave, float c, float s, ArrayList<Turret> t){
+	public static void newSave(String levelpath, String levelname, int wave,int basehealth, float c, float s, ArrayList<Turret> t){
 		file.setWritable(true);
 		try{
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -41,6 +40,8 @@ public class Save{
 			name.setValue(levelpath);
 			Attr wavenum = doc.createAttribute("wavenum");
 			wavenum.setValue(String.valueOf(wave));
+			Attr bh = doc.createAttribute("basehealth");
+			bh.setValue(String.valueOf(basehealth));
 			Attr credits = doc.createAttribute("credits");
 			credits.setValue(String.valueOf(c));
 			Attr score = doc.createAttribute("score");
@@ -51,7 +52,8 @@ public class Save{
 			levelstatus.setAttributeNode(wavenum);
 			levelstatus.setAttributeNode(credits);
 			levelstatus.setAttributeNode(score);
-						
+			levelstatus.setAttributeNode(bh);
+			
 			Element turrets = doc.createElement("Turrets");
 			for(int i = 0; i < t.size(); i++){
 				Turret turret = t.get(i);
@@ -94,6 +96,7 @@ public class Save{
 			Node levelNode = doc.getElementsByTagName("Level").item(0); //<Level> Node
 			if(levelNode.getNodeType() == Node.ELEMENT_NODE){
 			Element e = (Element) levelNode;
+			int basehealth = Integer.parseInt(e.getAttribute("basehealth"));
 			float credits = Float.parseFloat(e.getAttribute("credits"));
 			String name = e.getAttribute("name");
 			String path = e.getAttribute("path");
@@ -110,15 +113,14 @@ public class Save{
 					float x = Float.parseFloat(eElement.getAttribute("x"));
 					float y = Float.parseFloat(eElement.getAttribute("y"));
 					int value = Integer.parseInt(eElement.getAttribute("value"));
-					Turret t = new Turret(0);
-					t.place();
+					Turret t = new Turret();
+					t.place(value);
 					t.updatePlacement(x, y);
 					t.upgrade(id);
-					t.value = value;
 					turrets.add(t);
 				}
 			}
-			return new SaveData(path,name, wavenum, credits, score, turrets);
+			return new SaveData(path,name, wavenum, basehealth,credits, score, turrets);
 			}
 			
 			

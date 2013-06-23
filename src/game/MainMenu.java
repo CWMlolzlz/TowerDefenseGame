@@ -1,9 +1,10 @@
 package game;
 
+import gui.Button;
+import gui.GUIElement;
+import gui.Menu;
 import gui.menus.LevelSelect;
 import gui.menus.LevelSelectButton;
-import gui.menus.Menu;
-import gui.menus.MenuButton;
 import gui.menus.Options;
 import gui.menus.PlayMenu;
 import gui.menus.Top;
@@ -33,7 +34,7 @@ public class MainMenu extends BasicGameState{
 	public static int width;
 	public static int height;
 	public static int my,mx;
-	public static Point mousepoint = new Point(Mouse.getX(), Mouse.getY());
+	public static Point mousepoint;
 	public static LevelListData levellistdata = new LevelListData();
 	public ArrayList<Menu> menus = new ArrayList<Menu>();
 	
@@ -53,7 +54,7 @@ public class MainMenu extends BasicGameState{
 		for(int i = 0; i < menus.size(); i++){
 			menus.get(i).draw(g);
 		}
-				
+			
 		g.setColor(Color.white);
 				
 	}
@@ -81,11 +82,13 @@ public class MainMenu extends BasicGameState{
 	public void leftClick(StateBasedGame sbg) {
 		for(int i = 0; i < menus.size(); i++){
 			Menu m = menus.get(i);
-			if(m.outline.contains(mousepoint)){
-				MenuButton b = m.getClickedButton(mousepoint);
-				if(b != null){
+			if(m.shape.contains(mousepoint)){
+				GUIElement ge = m.getClickedElement(mousepoint);
+				if(ge != null && ge instanceof Button){
+					Button b = (Button) ge;
 					if(b instanceof LevelSelectButton){
-						try {Launch.playLevel(b.levelpath, b.text);}catch(SlickException e){e.printStackTrace();}
+						LevelSelectButton lsb = (LevelSelectButton)b;
+						try {Launch.playLevel(lsb.levelpath, lsb.text);}catch(SlickException e){e.printStackTrace();}
 					}else{
 						checkEvent(b.getEvent());
 					}

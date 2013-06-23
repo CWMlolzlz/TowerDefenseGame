@@ -35,7 +35,7 @@ public class Launch extends StateBasedGame implements InputProviderListener{
 	public static GameContainer gamecontainer;
 	private static StateBasedGame sbg;
 	
-	public static String USERNAME = "Guest";
+	public static String USERNAME = "";
 	
 	public Launch(String gamename){
 		super(gamename);

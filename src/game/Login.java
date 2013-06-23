@@ -1,12 +1,12 @@
 package game;
 
+import gui.Button;
 import gui.GUIElement;
 import gui.Panel;
 import gui.Text;
 import gui.TextBox;
 import gui.login.CreateAccountPanel;
 import gui.login.LoginPanel;
-import gui.modding.Button;
 
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
@@ -76,6 +76,7 @@ public class Login extends BasicGameState implements KeyListener{
 		switch(event){
 		case(LOGIN):
 			if(loginPanel.isFilled() && loginPanel.email.truetext.contains("@")){
+				label.setText("Logging In");
 				NetworkConnect.login(loginPanel.getDetails());
 			}else{
 				error("Please Fill Out Form Completely");
@@ -96,6 +97,7 @@ public class Login extends BasicGameState implements KeyListener{
 		case(CREATEACCOUNT):
 			if(createAccountPanel.passwordMatch()){
 				if(createAccountPanel.isFilled()){
+					label.setText("Creating Account");
 					NetworkConnect.createAccount(createAccountPanel.getDetails());
 				}else{
 					error("Please Fill Out Form Completely");
@@ -113,15 +115,26 @@ public class Login extends BasicGameState implements KeyListener{
 
 	@Override
     public void keyPressed(int k, char c){
-		int ascii = (int)c;
+		int ascii = (int) c;
 		if(31 <= ascii && ascii <= 126){
 			input(c);
 		}else if(ascii == 13){
-			checkEvent(LOGIN);
+			if(activePanel == loginPanel){
+				checkEvent(LOGIN);
+			}else{
+				checkEvent(CREATEACCOUNT);
+			}
 		}else if(ascii == 8){
 			backspace();
 		}else if(ascii == 9){
-			//tab
+			//next textbox
+			if(textBoxFocus != null){
+				if(textBoxFocus.isEmpty()){
+					textBoxFocus.setToDefault();
+				}
+				textBoxFocus = activePanel.nextTextBox(textBoxFocus);
+				textBoxFocus.select();
+			}
 		}
     }
 	

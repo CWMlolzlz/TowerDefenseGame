@@ -1,15 +1,15 @@
 package game;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 public class NetworkConnect {
@@ -20,21 +20,11 @@ public class NetworkConnect {
 	static BCrypt b = new BCrypt();
 	static byte[] salt = "tas5643964jgoejk".getBytes();
 	
-	public NetworkConnect(){
-		try{
-			d = MessageDigest.getInstance("SHA-256");
-		}catch(NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
 	public static void login(String[] details){
 		try{
 			String email = details[0];
 			String hpw = hash(details[1]);
-			String out = getResponseFromServer("http://www.grubber.co.nz/game/cwmlolzlz/scripts/login.php?email=" + email + "&pw=" + hpw);
-			System.out.println(out);
+			String out = getResponseFromServer("http://www.grubber.co.nz/game/cwmlolzlz/scripts/login.php?email=" + email + "&pw=" + hpw)[0];
 			if(out.contains("Bad Login")){
 				Login.error(out);
 			}else if(out.contains("EmailFormatWrong")){
@@ -76,23 +66,35 @@ public class NetworkConnect {
         return result;
     }
 	
-	public void uploadScore(float score, String name, String level){
-		try{
-			u = new URL("http://www.grubber.co.nz/game/cwmlolzlz/scripts/highscore.php?level="+name+"?username="+Launch.USERNAME+"&score="+score);
-			URLConnection con = u.openConnection();
-			con.getInputStream();
-		}catch(IOException e) {
-			e.printStackTrace();
+	public String[] uploadScore(float s, String level){
+		String[] scorelines = getResponseFromServer("http://www.grubber.co.nz/game/cwmlolzlz/scripts/highscore.php?levelpath="+level+"&username="+Launch.USERNAME+"&score="+s);
+		Map<Integer,String> scoremap = new HashMap<Integer,String>();
+		for(int i = 0; i < scorelines.length; i++){
+			String term = scorelines[i];
+			if(term.contains("#$")){
+				String[] split = scorelines[i].split("[#$]");
+				String name = split[0];
+				int score = (int)Float.parseFloat(split[2]);
+				scoremap.put(score,name);
+			}
 		}
 		
+		Map<Integer,String> sortedscoremap = new TreeMap<Integer,String>(scoremap);
+		String sorted = "";
+		for(Map.Entry entry : sortedscoremap.entrySet()){
+			sorted += entry.getValue() + "  " + entry.getKey() + "\n";
+		}
+		String[] sortedscores = sorted.split("\n");
+		return sortedscores;
 	}
-
+	
+	
+	
 	public static void createAccount(String[] details) {
 		String username = details[0];
 		String email = details[1];
 		String pass = hash(details[2]);
-		String response = getResponseFromServer("http://www.grubber.co.nz/game/cwmlolzlz/scripts/createaccount.php?username=" + username + "&email=" + email + "&pw=" + pass);
-		System.out.println(response);
+		String response = getResponseFromServer("http://www.grubber.co.nz/game/cwmlolzlz/scripts/createaccount.php?username=" + username + "&email=" + email + "&pw=" + pass)[0];
 		if(response.contains("Created")){
 			//successful creation
 			Login.createdAccount();
@@ -102,22 +104,23 @@ public class NetworkConnect {
 		}
 	}
 
-	private static String getResponseFromServer(String url) {
+	private static String[] getResponseFromServer(String url) {
 		try{
-			System.out.println(url);
 			u = new URL(url);
-			HttpURLConnection con =  (HttpURLConnection) u.openConnection();
+			HttpURLConnection con = (HttpURLConnection) u.openConnection();
 			con.setDoInput(true);
-			BufferedReader stream = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			return stream.readLine();
+			BufferedReader r = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String line = "";
+			String term;
+			while((term = r.readLine()) != null){
+				line += term+" ";
+			}
+			return line.split("\\s+");
 		}catch(Exception e){
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
-	}
-	
-	
+	}	
 }
 
 

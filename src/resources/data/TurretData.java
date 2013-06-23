@@ -17,7 +17,7 @@ import resources.types.TurretType;
 public class TurretData{
 	
 	private ArrayList<TurretType> turrettypes = new ArrayList<TurretType>(); // in the form of a line read from file
-	private ArrayList<int[]> upgrades = new ArrayList<int[]>(); // in the form of a line read from file
+	private ArrayList<int[]> upgrades = new ArrayList<int[]>(1023); // in the form of a line read from file
 	private ArrayList<BulletType> bullettypes = new ArrayList<BulletType>(); // form of a line read from file
 	
 	public void loadUpgrades(){
@@ -49,8 +49,8 @@ public class TurretData{
 					int bulletTypeID = Integer.parseInt(eElement.getAttribute("bulletType"));
 					String color = eElement.getAttribute("color");
 					
-					turrettypes.add(new TurretType(id,name,cost,bDamage,bRange,bRateOfFire,bullets,bulletTypeID,color));
-					
+					turrettypes.add(id,new TurretType(name,cost,bDamage,bRange,bRateOfFire,bullets,bulletTypeID,color));
+				
 				}
 			}
 			//upgrade branches			

@@ -1,7 +1,6 @@
 package resources;
 
 import game.Play;
-import gui.LevelGUI;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,7 +22,7 @@ public class Enemy {
 	
 	private float xoff, yoff;
 	
-	protected int radius;
+	public int radius;
 	public float x, y;
 	public int currentsegment = -1;
 	public float currentdistanceonsegment = 0;
@@ -96,7 +95,6 @@ public class Enemy {
 		
 		if(health <= 0){
 			new Explosion(x+xoff,y+yoff);
-			try {this.finalize();}catch(Throwable e){e.printStackTrace();}
 			Play.pay(reward);
 			Play.enemyKilled(this);
 		}else{

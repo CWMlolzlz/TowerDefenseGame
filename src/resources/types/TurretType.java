@@ -4,7 +4,7 @@ import org.newdawn.slick.Color;
 
 public class TurretType{
 	
-	public int ID, COST, bDamage, bRange, numofBULLETS; //lower case 'b' stands for base
+	public int COST, bDamage, bRange, numofBULLETS; //lower case 'b' stands for base
 	public float bRateOfFire;
 	public String NAME;
 	public int BULLETTYPE;
@@ -12,8 +12,7 @@ public class TurretType{
 	
 	private int r,g,b;
 	
-	public TurretType(int id, String name, int cost, int damage, int range, int rof, int bullets, int bulletID, String colornumbers){//optimise graphic and color datatypes
-		ID = id;
+	public TurretType(String name, int cost, int damage, int range, int rof, int bullets, int bulletID, String colornumbers){//optimise graphic and color datatypes
 		NAME = name;
 		COST = cost;
 		bDamage = damage;

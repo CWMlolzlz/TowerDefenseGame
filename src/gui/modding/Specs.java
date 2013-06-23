@@ -1,6 +1,7 @@
 package gui.modding;
 
 import game.Modding;
+import gui.Button;
 import gui.Panel;
 import gui.Text;
 import resources.types.TurretType;
@@ -36,7 +37,7 @@ public class Specs extends Panel{
 			ttype.bDamage = Integer.parseInt(damage.getText());
 			ttype.bRange = Integer.parseInt(range.getText());
 		}catch(Exception e){
-			System.out.println("Cannot parse all information");
+			//System.out.println("Cannot parse all information");
 		}
 	}
 	

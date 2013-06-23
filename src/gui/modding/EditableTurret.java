@@ -10,7 +10,6 @@ import resources.types.TurretType;
 public class EditableTurret extends Turret{
 
 	public EditableTurret(TurretType data){
-		super(data.COST);
 		numofBullets = data.numofBULLETS;
 		bDamage = data.bDamage;
 		bRange = data.bRange;
