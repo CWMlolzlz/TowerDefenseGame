@@ -18,7 +18,7 @@ public class NetworkConnect {
 	
 	static MessageDigest d;
 	static BCrypt b = new BCrypt();
-	static byte[] salt = "tas5643964jgoejk".getBytes();
+	
 	
 	public static void login(String[] details){
 		try{
